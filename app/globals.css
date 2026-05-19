@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base resets ─────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #F8F6F2;
+  color: #0a0a0a;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+}
+
+/* ─── Text selection ──────────────────────────────────────── */
+::selection {
+  background-color: rgba(245, 183, 49, 0.3);
+  color: #0a0a0a;
+}
+
+::-moz-selection {
+  background-color: rgba(245, 183, 49, 0.3);
+  color: #0a0a0a;
+}
+
+/* ─── Custom scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #EDE9E4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+/* ─── Dot grid pattern ────────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.04) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+/* ─── Glass card (light) ──────────────────────────────────── */
+.glass-card {
+  background: #ffffff;
+  border: 1px solid #E8E2D9;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+}
+
+.glass-card-hover {
+  background: #ffffff;
+  border: 1px solid #E8E2D9;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  border-color: #0a0a0a;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Glow effects ────────────────────────────────────────── */
+.glow-mint {
+  box-shadow: 0 0 24px rgba(245, 183, 49, 0.2);
+}
+
+.glow-mint-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-mint-hover:hover {
+  box-shadow: 0 0 32px rgba(245, 183, 49, 0.3);
+}
+
+/* ─── Gradient text ───────────────────────────────────────── */
+.gradient-text {
+  color: #F5B731;
+}
+
+.gradient-text-mint {
+  background: linear-gradient(135deg, #F5B731 0%, #f7c44d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Mint button base ────────────────────────────────────── */
+.btn-mint {
+  background: #F5B731;
+  color: #000000;
+  font-weight: 700;
+  border-radius: 9999px;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn-mint:hover {
+  background: #e8a820;
+  box-shadow: 0 4px 20px rgba(245, 183, 49, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-mint:active {
+  transform: translateY(0px);
+}
+
+/* ─── Dark button ────────────────────────────────────────── */
+.btn-dark {
+  background: #0A0A0A;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 9999px;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn-dark:hover {
+  background: #1A1A1A;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-dark:active {
+  transform: translateY(0px);
+}
+
+/* ─── Ghost button ────────────────────────────────────────── */
+.btn-ghost {
+  border: 1.5px solid #0a0a0a;
+  color: #0a0a0a;
+  border-radius: 9999px;
+  transition: border-color 0.2s ease, background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(245, 183, 49, 0.08);
+  border-color: #F5B731;
+  transform: translateY(-1px);
+}
+
+/* ─── Marquee / logo strip ────────────────────────────────── */
+.marquee-container {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ─── Accordion ───────────────────────────────────────────── */
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+}
+
+.accordion-content.open {
+  max-height: 400px;
+  opacity: 1;
+}
+
+/* ─── Orb blobs ───────────────────────────────────────────── */
+.orb {
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  position: absolute;
+}
+
+/* ─── Number connector line ───────────────────────────────── */
+.step-connector {
+  position: relative;
+}
+
+.step-connector::after {
+  content: "";
+  position: absolute;
+  top: 28px;
+  right: -50%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(245, 183, 49, 0.4),
+    rgba(245, 183, 49, 0.08)
+  );
+}
+
+@media (max-width: 1023px) {
+  .step-connector::after {
+    display: none;
+  }
+}
+
+/* ─── Benefits marquee ────────────────────────────────────── */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* ─── Utility overrides ───────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
