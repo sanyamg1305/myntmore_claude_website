@@ -57,10 +57,9 @@ function AccordionItem({ item, isOpen, onToggle, index }: AccordionItemProps) {
       }`}
       style={
         isOpen
-          ? { backgroundColor: "#FEF9EE", borderColor: "rgba(245,183,49,0.4)" }
+          ? { backgroundColor: "#FEF9EE", borderColor: "rgba(245,183,49,0.4)", borderLeftColor: "#F5B731", borderLeftWidth: "3px" }
           : { backgroundColor: "#FFFFFF", borderColor: "#E8E2D9" }
       }
-      style={isOpen ? { borderLeftColor: "#F5B731", borderLeftWidth: "3px" } : {}}
     >
       <button
         type="button"
