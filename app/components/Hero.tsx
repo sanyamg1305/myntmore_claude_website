@@ -64,6 +64,7 @@ export default function Hero() {
 
     const timer = setTimeout(() => {
       function draw(ts: number) {
+        if (!path) return;
         if (!startTime) startTime = ts;
         const raw = (ts - startTime) / duration;
         const progress = Math.min(raw, 1);
