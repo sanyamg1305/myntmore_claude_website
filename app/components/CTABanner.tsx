@@ -138,7 +138,6 @@ export default function CTABanner() {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2.5 px-10 py-5 rounded-full font-black text-lg group btn-dark"
-          style={{ boxShadow: "0 0 50px rgba(245,183,49,0.45)" }}
         >
           Book Your Free Strategy Call
           <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
