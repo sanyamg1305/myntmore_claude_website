@@ -237,6 +237,25 @@ body {
   }
 }
 
+/* ─── Animated CTA banner gradients ──────────────────────── */
+@keyframes ctaGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.cta-animated-section {
+  background: linear-gradient(-45deg, #0a0a0a, #1a0533, #2a0d00, #0a1628, #1a0a00, #0d0520);
+  background-size: 400% 400%;
+  animation: ctaGradient 6s ease infinite;
+}
+
+/* ─── Floating bubble animation ──────────────────────────── */
+@keyframes bubble-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
 /* ─── Benefits marquee ────────────────────────────────────── */
 @keyframes marquee-left {
   0% { transform: translateX(0); }
@@ -255,4 +274,22 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ─── Workflow dot travel ─────────────────────────────────── */
+@keyframes wf-flow-right {
+  0%   { left: -5px;             opacity: 0; }
+  8%   {                          opacity: 1; }
+  92%  {                          opacity: 1; }
+  100% { left: calc(100% - 5px); opacity: 0; }
+}
+@keyframes wf-flow-down {
+  0%   { top: -5px;              opacity: 0; }
+  8%   {                          opacity: 1; }
+  92%  {                          opacity: 1; }
+  100% { top: calc(100% - 5px);  opacity: 0; }
+}
+@keyframes wf-shimmer {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(400%);  }
 }

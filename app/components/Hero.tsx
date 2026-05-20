@@ -1,75 +1,267 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+
 export default function Hero() {
+  const blob1Ref = useRef<HTMLDivElement>(null);
+  const blob2Ref = useRef<HTMLDivElement>(null);
+  const blob3Ref = useRef<HTMLDivElement>(null);
+  const blob4Ref = useRef<HTMLDivElement>(null);
+  const underlineRef = useRef<SVGPathElement>(null);
+  const stat1Ref = useRef<HTMLSpanElement>(null);
+  const stat2Ref = useRef<HTMLSpanElement>(null);
+  const stat3Ref = useRef<HTMLSpanElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const cycleRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    let animId: number;
+    const start = performance.now();
+
+    function animate() {
+      const t = (performance.now() - start) / 1000;
+
+      if (blob1Ref.current) {
+        const x = Math.sin(t * 0.7) * 220 + Math.sin(t * 0.3) * 80;
+        const y = Math.cos(t * 0.5) * 160 + Math.cos(t * 0.2) * 60;
+        blob1Ref.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      if (blob2Ref.current) {
+        const x = Math.sin(t * 0.6 + 2) * 220 + Math.cos(t * 0.4) * 80;
+        const y = Math.cos(t * 0.7 + 1) * 160 + Math.sin(t * 0.3) * 60;
+        blob2Ref.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      if (blob3Ref.current) {
+        const x = Math.sin(t * 0.55 + 4) * 200 + Math.sin(t * 0.35) * 70;
+        const y = Math.cos(t * 0.65 + 2) * 180 + Math.cos(t * 0.45) * 60;
+        blob3Ref.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      if (blob4Ref.current) {
+        const x = Math.sin(t * 0.65 + 1) * 190 + Math.cos(t * 0.3) * 70;
+        const y = Math.cos(t * 0.5 + 3) * 160 + Math.sin(t * 0.4) * 60;
+        blob4Ref.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      animId = requestAnimationFrame(animate);
+    }
+
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  // Draw-in underline animation using rAF (same as blobs)
+  useEffect(() => {
+    const path = underlineRef.current;
+    if (!path) return;
+
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = String(length);
+    path.style.strokeDashoffset = String(length);
+
+    let animId: number;
+    let startTime: number | null = null;
+    const duration = 1400;
+
+    const timer = setTimeout(() => {
+      function draw(ts: number) {
+        if (!startTime) startTime = ts;
+        const raw = (ts - startTime) / duration;
+        const progress = Math.min(raw, 1);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        path.style.strokeDashoffset = String(length * (1 - eased));
+        if (progress < 1) {
+          animId = requestAnimationFrame(draw);
+        }
+      }
+      animId = requestAnimationFrame(draw);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
+  // Number ticker animation — fires after page load since hero is immediately visible
+  useEffect(() => {
+    const stats = [
+      { ref: stat1Ref, target: 120,   duration: 1800, format: (n: number) => `$${Math.round(n)}M+` },
+      { ref: stat2Ref, target: 18,    duration: 1400, format: (n: number) => `${Math.round(n)} Days` },
+      { ref: stat3Ref, target: 30000, duration: 2200, format: (n: number) => `${Math.round(n).toLocaleString()}+` },
+    ];
+
+    const animIds: number[] = [];
+
+    const timer = setTimeout(() => {
+      stats.forEach(({ ref, target, duration, format }) => {
+        if (!ref.current) return;
+        let startTime: number | null = null;
+        function tick(ts: number) {
+          if (!startTime) startTime = ts;
+          const progress = Math.min((ts - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          if (ref.current) ref.current.textContent = format(eased * target);
+          if (progress < 1) animIds.push(requestAnimationFrame(tick));
+        }
+        animIds.push(requestAnimationFrame(tick));
+      });
+    }, 600);
+
+    return () => {
+      clearTimeout(timer);
+      animIds.forEach(cancelAnimationFrame);
+    };
+  }, []);
+
+  // Cycling value-prop line
+  useEffect(() => {
+    const el = cycleRef.current;
+    if (!el) return;
+
+    const PHRASES = [
+      "You Close the Deals.",
+      "You Hit Your Number.",
+      "You Scale the Team.",
+      "You Win Every Quarter.",
+      "You Own the Market.",
+    ];
+
+    let idx = 0;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const rafIds: number[] = [];
+
+    function easeOut(t: number) { return 1 - Math.pow(1 - t, 3); }
+
+    function animateOut(onDone: () => void) {
+      let start: number | null = null;
+      const dur = 320;
+      function step(ts: number) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        const e = easeOut(p);
+        if (el) {
+          el.style.opacity = String(1 - e);
+          el.style.transform = `translateY(${e * -18}px)`;
+        }
+        if (p < 1) rafIds.push(requestAnimationFrame(step));
+        else onDone();
+      }
+      rafIds.push(requestAnimationFrame(step));
+    }
+
+    function animateIn() {
+      if (el) {
+        el.style.transform = "translateY(18px)";
+      }
+      let start: number | null = null;
+      const dur = 380;
+      function step(ts: number) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        const e = easeOut(p);
+        if (el) {
+          el.style.opacity = String(e);
+          el.style.transform = `translateY(${(1 - e) * 18}px)`;
+        }
+        if (p < 1) rafIds.push(requestAnimationFrame(step));
+      }
+      rafIds.push(requestAnimationFrame(step));
+    }
+
+    function cycle() {
+      animateOut(() => {
+        idx = (idx + 1) % PHRASES.length;
+        if (el) el.textContent = PHRASES[idx];
+        animateIn();
+        timers.push(setTimeout(cycle, 3200));
+      });
+    }
+
+    // Hold the first phrase for 3.2s before starting
+    timers.push(setTimeout(cycle, 3200));
+
+    return () => {
+      timers.forEach(clearTimeout);
+      rafIds.forEach(cancelAnimationFrame);
+    };
+  }, []);
+
   return (
     <section
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
       style={{ backgroundColor: "#F8F6F2" }}
       aria-label="Hero"
     >
-      {/* Left yellow blob */}
+      {/* Yellow blob — top left */}
       <div
+        ref={blob1Ref}
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "-60px",
-          left: "-180px",
+          top: "-100px",
+          left: "-150px",
+          width: "800px",
+          height: "800px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(245,183,49,0.75) 0%, rgba(255,160,0,0.4) 40%, transparent 68%)",
+          filter: "blur(45px)",
+          pointerEvents: "none",
+          willChange: "transform",
+        }}
+      />
+
+      {/* Purple blob — top right */}
+      <div
+        ref={blob2Ref}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "-80px",
+          right: "-150px",
           width: "750px",
           height: "750px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, #F5B731 0%, #FF8C42 50%, transparent 70%)",
-          filter: "blur(100px)",
-          opacity: 0.55,
+          background: "radial-gradient(circle, rgba(168,85,247,0.7) 0%, rgba(124,58,237,0.35) 40%, transparent 68%)",
+          filter: "blur(45px)",
           pointerEvents: "none",
+          willChange: "transform",
         }}
       />
 
-      {/* Right purple blob */}
+      {/* Orange blob — bottom left */}
       <div
+        ref={blob3Ref}
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "0px",
-          right: "-160px",
+          bottom: "-150px",
+          left: "5%",
+          width: "700px",
+          height: "700px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(255,107,53,0.7) 0%, rgba(255,60,0,0.35) 40%, transparent 68%)",
+          filter: "blur(45px)",
+          pointerEvents: "none",
+          willChange: "transform",
+        }}
+      />
+
+      {/* Yellow blob — bottom right */}
+      <div
+        ref={blob4Ref}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "-120px",
+          right: "0%",
           width: "650px",
           height: "650px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, #A855F7 0%, #7C3AED 40%, transparent 70%)",
-          filter: "blur(110px)",
-          opacity: 0.4,
+          background: "radial-gradient(circle, rgba(245,183,49,0.65) 0%, rgba(255,180,0,0.3) 40%, transparent 68%)",
+          filter: "blur(45px)",
           pointerEvents: "none",
-        }}
-      />
-
-      {/* Bottom left orange blob */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: "-100px",
-          left: "10%",
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, #FF6B35 0%, transparent 70%)",
-          filter: "blur(120px)",
-          opacity: 0.35,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Bottom right yellow blob */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: "-60px",
-          right: "5%",
-          width: "400px",
-          height: "400px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, #F5B731 0%, transparent 70%)",
-          filter: "blur(100px)",
-          opacity: 0.3,
-          pointerEvents: "none",
+          willChange: "transform",
         }}
       />
 
@@ -79,8 +271,9 @@ export default function Hero() {
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8"
           style={{
-            background: "#FEF3D7",
-            borderColor: "rgba(245,183,49,0.3)",
+            background: "rgba(255,255,255,0.7)",
+            borderColor: "rgba(245,183,49,0.4)",
+            backdropFilter: "blur(8px)",
           }}
         >
           <span
@@ -89,42 +282,32 @@ export default function Hero() {
             aria-hidden="true"
           />
           <span className="text-sm font-semibold text-[#0a0a0a]">
-            Trusted by <span style={{ color: "#b87a00" }}>80+</span> B2B Companies
+            Trusted by <span style={{ color: "#b87a00" }}>120+</span> Companies Worldwide
           </span>
         </div>
 
         {/* H1 */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[0.95] mb-6 text-[#0a0a0a]">
-          <span className="block">We Fill Your Pipeline.</span>
-          <span className="block mt-2 italic">
-            You Close the Deals.
-          </span>
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] mb-6 text-[#0a0a0a]">
+          <span className="block font-black">We Fill Your Pipeline.</span>
+          <span
+            ref={cycleRef}
+            className="block mt-2 italic font-semibold"
+            style={{ color: "#3a3a3a", willChange: "transform, opacity" }}
+          >You Close the Deals.</span>
         </h1>
 
-        {/* Yellow wavy underline under h1 */}
+        {/* Yellow wavy underline */}
         <div className="flex justify-center -mt-3 mb-6" aria-hidden="true">
-          <svg
-            viewBox="0 0 420 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-[280px] sm:w-[360px] lg:w-[420px]"
-            aria-hidden="true"
-          >
-            <path
-              d="M4 10 C40 4, 80 16, 120 10 S200 4, 240 10 S320 16, 360 10 S400 4, 416 10"
-              stroke="#F5B731"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              fill="none"
-            />
+          <svg viewBox="0 0 420 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[280px] sm:w-[360px] lg:w-[420px]">
+            <path ref={underlineRef} d="M4 10 C40 4, 80 16, 120 10 S200 4, 240 10 S320 16, 360 10 S400 4, 416 10" stroke="#F5B731" strokeWidth="3.5" strokeLinecap="round" fill="none" />
           </svg>
         </div>
 
         {/* Subheading */}
         <p className="max-w-2xl mx-auto text-lg sm:text-xl leading-relaxed mb-10 font-normal" style={{ color: "#6B6B6B" }}>
-          Myntmore runs precision cold outreach and account-based marketing
-          campaigns that book qualified meetings — so your sales team{" "}
-          <span className="text-[#0a0a0a] font-semibold">never chases cold leads again.</span>
+          We run cold email, LinkedIn outreach, and ABM so your pipeline
+          fills itself — and your sales team spends every hour closing,
+          not prospecting.
         </p>
 
         {/* CTAs */}
@@ -136,53 +319,33 @@ export default function Hero() {
             className="btn-dark px-8 py-4 text-base font-bold inline-flex items-center gap-2 w-full sm:w-auto justify-center"
           >
             Book Your Free Strategy Call
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-          <a
-            href="#results"
-            className="text-base font-semibold text-[#0a0a0a] hover:underline underline-offset-4 transition-all duration-200 w-full sm:w-auto text-center px-4 py-4"
-          >
+          <a href="#results" className="text-base font-semibold text-[#0a0a0a] hover:underline underline-offset-4 transition-all duration-200 w-full sm:w-auto text-center px-4 py-4">
             See Our Results
           </a>
         </div>
 
         {/* Stats row */}
-        <div className="inline-flex flex-col sm:flex-row items-center gap-0 sm:gap-0 rounded-2xl overflow-hidden"
-          style={{ border: "1px solid #E8E2D9", background: "#FFFFFF", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
+        <div
+          ref={statsRef}
+          className="inline-flex flex-col sm:flex-row items-center gap-0 sm:gap-0 rounded-2xl overflow-hidden"
+          style={{ border: "1px solid #E8E2D9", background: "rgba(255,255,255,0.8)", boxShadow: "0 2px 16px rgba(0,0,0,0.06)", backdropFilter: "blur(8px)" }}
         >
           {[
-            { value: "1,200+", label: "Meetings Booked" },
-            { value: "$48M+", label: "Pipeline Generated" },
-            { value: "92%", label: "Client Retention" },
+            { ref: stat1Ref, value: "$0M+",    label: "Pipeline Created for Clients" },
+            { ref: stat2Ref, value: "0 Days",   label: "Avg. Days to First Booked Meeting" },
+            { ref: stat3Ref, value: "0+",       label: "Meetings Booked for Clients Annually" },
           ].map((stat, i) => (
             <div
               key={stat.label}
-              className={`flex flex-col items-center px-8 py-5 w-full sm:w-auto ${
-                i !== 2
-                  ? "border-b sm:border-b-0 sm:border-r"
-                  : ""
-              }`}
+              className={`flex flex-col items-center px-8 py-5 w-full sm:w-auto ${i !== 2 ? "border-b sm:border-b-0 sm:border-r" : ""}`}
               style={{ borderColor: "#E8E2D9" }}
             >
-              <span className="text-2xl sm:text-3xl font-black text-[#0a0a0a]">
-                {stat.value}
-              </span>
-              <span className="text-xs sm:text-sm font-medium mt-0.5 whitespace-nowrap" style={{ color: "#8C8279" }}>
-                {stat.label}
-              </span>
+              <span ref={stat.ref} className="text-2xl sm:text-3xl font-bold text-[#0a0a0a]">{stat.value}</span>
+              <span className="text-xs sm:text-sm font-medium mt-0.5 whitespace-nowrap" style={{ color: "#8C8279" }}>{stat.label}</span>
             </div>
           ))}
         </div>
@@ -190,10 +353,8 @@ export default function Hero() {
 
       {/* Bottom fade */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-        style={{
-          background: "linear-gradient(to bottom, transparent, rgba(248,246,242,0.7))",
-        }}
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(248,246,242,0.85))" }}
         aria-hidden="true"
       />
     </section>

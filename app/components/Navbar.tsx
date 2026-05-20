@@ -28,15 +28,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "backdrop-blur-md border-b shadow-sm"
-          : "backdrop-blur-sm"
+          : ""
       }`}
       style={
         scrolled
-          ? { backgroundColor: "rgba(248,246,242,0.95)", borderColor: "#E8E2D9" }
-          : { backgroundColor: "rgba(248,246,242,0.85)" }
+          ? { backgroundColor: "rgba(248,246,242,0.88)", borderColor: "#E8E2D9" }
+          : { backgroundColor: "transparent" }
       }
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,242 +1,283 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import type { ReactNode } from "react";
 
-type Stat = { num: string; label: string };
+// ─── Persona illustrations (SVG line-art) ────────────────────────────────────
+function RocketIllustration() {
+  return (
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <path d="M48 72 C38 60 30 44 34 26 C38 10 58 10 62 26 C66 44 58 60 48 72Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="48" cy="36" r="6" stroke="currentColor" strokeWidth="2.5"/>
+      <path d="M34 50 L22 58 L30 66 L38 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M62 50 L74 58 L66 66 L58 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M40 70 L44 82 L48 78 L52 82 L56 70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+    </svg>
+  );
+}
+
+function ChartIllustration() {
+  return (
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <rect x="16" y="56" width="14" height="24" rx="3" stroke="currentColor" strokeWidth="2.5"/>
+      <rect x="35" y="40" width="14" height="40" rx="3" stroke="currentColor" strokeWidth="2.5"/>
+      <rect x="54" y="26" width="14" height="54" rx="3" stroke="currentColor" strokeWidth="2.5"/>
+      <path d="M14 82 L82 82" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M22 54 L42 38 L61 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="3 3" opacity="0.5"/>
+      <circle cx="61" cy="24" r="4" fill="currentColor" opacity="0.7"/>
+    </svg>
+  );
+}
+
+function MegaphoneIllustration() {
+  return (
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <path d="M20 38 L20 58 L32 58 L56 72 L56 24 L32 38 Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M32 38 L32 58" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5"/>
+      <path d="M24 58 L24 72 L34 72 L34 58" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M62 36 C66 40 66 56 62 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M68 30 C76 37 76 59 68 66" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+    </svg>
+  );
+}
+
+function NetworkIllustration() {
+  return (
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <circle cx="48" cy="48" r="10" stroke="currentColor" strokeWidth="2.5"/>
+      <circle cx="20" cy="26" r="7" stroke="currentColor" strokeWidth="2.5"/>
+      <circle cx="76" cy="26" r="7" stroke="currentColor" strokeWidth="2.5"/>
+      <circle cx="20" cy="70" r="7" stroke="currentColor" strokeWidth="2.5"/>
+      <circle cx="76" cy="70" r="7" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="27" y1="29" x2="39" y2="41" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="69" y1="29" x2="57" y2="41" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="27" y1="67" x2="39" y2="55" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="69" y1="67" x2="57" y2="55" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+// ─── Persona data ─────────────────────────────────────────────────────────────
+type Benefit = { title: string; description: string };
 type Persona = {
   tab: string;
-  badge: string;
+  blobColor: string;
+  illustration: ReactNode;
   heading: string;
-  body: string;
-  benefits: string[];
-  stats: Stat[];
+  tagline: string;
+  cta: string;
+  benefits: Benefit[];
 };
 
-const personas: Persona[] = [
+const PERSONAS: Persona[] = [
   {
     tab: "Founders",
-    badge: "For Founders",
-    heading: "Stop being your own SDR. Start closing.",
-    body: "You started a company to build, not to spend 4 hours a day on LinkedIn. Myntmore runs your entire outbound engine — from ICP definition to booked meetings on your calendar.",
+    blobColor: "rgba(245,183,49,0.45)",
+    illustration: <RocketIllustration />,
+    heading: "Stop being your own SDR.\nStart closing.",
+    tagline: "You started a company to build — not to spend 4 hours a day on LinkedIn. Let Myntmore run the outbound engine.",
+    cta: "Explore Founder solutions",
     benefits: [
-      "Outbound running without hiring an SDR",
-      "Meetings booked while you focus on product",
-      "Clear pipeline visibility every week",
-    ],
-    stats: [
-      { num: "47", label: "Avg. meetings booked in 60 days" },
-      { num: "3x", label: "Lower cost than in-house SDR" },
-      { num: "2 weeks", label: "To first meeting booked" },
-      { num: "92%", label: "Founder client retention" },
+      { title: "Pipeline without headcount", description: "Run a full outbound motion without hiring an SDR or BDR. We do it end to end — strategy, copy, execution." },
+      { title: "First meeting in under 2 weeks", description: "Fast onboarding means fast results. Most founders see their first booked meeting within 14 days of starting." },
+      { title: "Stay focused on building", description: "You close. We fill. That's the entire model — no distractions, no micromanaging sequences, just calendar invites." },
     ],
   },
   {
     tab: "Sales Leaders",
-    badge: "For Sales Leaders",
-    heading: "Give your reps a full calendar. Every Monday.",
-    body: "Your team is built to close, not prospect. Myntmore feeds your reps a steady stream of qualified, pre-warmed meetings so they can focus on what they do best.",
+    blobColor: "rgba(99,102,241,0.35)",
+    illustration: <ChartIllustration />,
+    heading: "Give your team a full calendar.\nEvery single week.",
+    tagline: "Your reps are built to close, not prospect. Feed them a consistent flow of qualified, pre-warmed meetings.",
+    cta: "Explore Sales Leader solutions",
     benefits: [
-      "Consistent meeting volume across the team",
-      "Reps spend 100% of time closing",
-      "Full CRM integration and reporting",
-    ],
-    stats: [
-      { num: "1,200+", label: "Meetings booked for clients" },
-      { num: "60%", label: "Reduction in ramp time" },
-      { num: "$48M+", label: "Pipeline generated" },
-      { num: "3.2x", label: "Avg reply rate vs industry" },
+      { title: "Predictable meeting volume", description: "Know exactly how many qualified meetings hit your team's calendar each week — no more feast or famine." },
+      { title: "Reps close 40% more", description: "When reps stop prospecting and start closing, conversion rates climb. We've seen it across 120+ clients." },
+      { title: "Full CRM visibility", description: "Every meeting, touchpoint, and reply synced to HubSpot or Salesforce automatically. Zero manual logging." },
     ],
   },
   {
     tab: "Marketing Heads",
-    badge: "For Marketing",
-    heading: "ABM that actually reaches the right accounts.",
-    body: "Stop burning budget on ads that reach everyone. Our account-based marketing campaigns target your exact ICP with surgical precision — coordinated across email, LinkedIn, and intent signals.",
+    blobColor: "rgba(239,68,68,0.3)",
+    illustration: <MegaphoneIllustration />,
+    heading: "ABM that reaches the\nright accounts. Every time.",
+    tagline: "Stop burning budget reaching the wrong people. Our ABM campaigns target your exact ICP with surgical precision.",
+    cta: "Explore Marketing solutions",
     benefits: [
-      "Hyper-targeted account lists built for you",
-      "Multi-channel ABM sequences",
-      "Intent data to reach accounts actively buying",
-    ],
-    stats: [
-      { num: "$2.3M", label: "Pipeline from single ABM campaign" },
-      { num: "5x", label: "Higher response vs cold ads" },
-      { num: "28 days", label: "Average campaign launch time" },
-      { num: "80+", label: "B2B brands trust Myntmore" },
+      { title: "Account lists built for you", description: "We identify your highest-value target accounts and build targeted lists from scratch using intent data." },
+      { title: "Multi-channel coordination", description: "Email + LinkedIn running in sync to hit the full buying committee — so when your AE calls, they're already warm." },
+      { title: "Campaigns live in 28 days", description: "From brief to first email sent in under a month. No 3-month ramp-up. No unnecessary delays." },
     ],
   },
   {
     tab: "RevOps Teams",
-    badge: "For RevOps",
-    heading: "Clean data. Tight sequences. Predictable revenue.",
-    body: "We integrate directly with your CRM and tech stack. Every contact enriched, every sequence tracked, every meeting logged — so your forecasts are actually reliable.",
+    blobColor: "rgba(34,197,94,0.3)",
+    illustration: <NetworkIllustration />,
+    heading: "Clean data. Tight sequences.\nReliable revenue.",
+    tagline: "We integrate with your CRM and tech stack — every touchpoint tracked, every forecast accurate.",
+    cta: "Explore RevOps solutions",
     benefits: [
-      "Full CRM sync (HubSpot, Salesforce)",
-      "Enriched contact data at every touchpoint",
-      "Weekly reporting dashboards you can trust",
-    ],
-    stats: [
-      { num: "99%", label: "Data accuracy on contact lists" },
-      { num: "48h", label: "CRM integration setup time" },
-      { num: "Zero", label: "Manual data entry for your team" },
-      { num: "100%", label: "Pipeline visibility" },
+      { title: "99% data accuracy", description: "Every contact enriched and verified before it touches your CRM. No more bounces, dead leads, or dirty data." },
+      { title: "CRM integrated in 48 hours", description: "HubSpot and Salesforce integrations completed in under 2 days. Your team spends zero time on manual entry." },
+      { title: "Forecasts you can trust", description: "With every meeting, reply, and touchpoint logged automatically, your pipeline numbers become genuinely reliable." },
     ],
   },
 ];
 
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function WhoWeHelp() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const persona = personas[activeIndex];
+  const contentRef = useRef<HTMLDivElement>(null);
+  const pendingIndex = useRef<number | null>(null);
+
+  const switchTab = useCallback((idx: number) => {
+    if (idx === activeIndex) return;
+    const el = contentRef.current;
+    if (el) {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(10px)";
+    }
+    pendingIndex.current = idx;
+    setTimeout(() => {
+      setActiveIndex(idx);
+      // fade back in after React re-renders
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (contentRef.current) {
+            contentRef.current.style.opacity = "1";
+            contentRef.current.style.transform = "translateY(0px)";
+          }
+        });
+      });
+    }, 180);
+  }, [activeIndex]);
+
+  // Ensure content starts visible
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.style.opacity = "1";
+      contentRef.current.style.transform = "translateY(0px)";
+    }
+  }, []);
+
+  const persona = PERSONAS[activeIndex];
 
   return (
     <section
       style={{ backgroundColor: "#F8F6F2" }}
       className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
+      aria-labelledby="who-heading"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Section header */}
+
+        {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a0a0a] mb-4">
+          <h2
+            id="who-heading"
+            className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a0a0a] mb-4"
+          >
             Built for every B2B growth team
           </h2>
           <p className="max-w-2xl mx-auto text-lg leading-relaxed" style={{ color: "#6B6B6B" }}>
-            Whether you're a founder doing outbound yourself or a VP Sales scaling a team — Myntmore has a playbook for you.
+            Whether you&rsquo;re a founder doing outbound yourself or a VP Sales scaling a team — Myntmore has a playbook for you.
           </p>
         </div>
 
-        {/* Tab bar */}
-        <div className="flex flex-wrap sm:flex-nowrap justify-center gap-0 mb-8 border-b" style={{ borderColor: "#E8E2D9" }}>
-          {personas.map((p, i) => (
-            <button
-              key={p.tab}
-              onClick={() => setActiveIndex(i)}
-              className="relative px-6 py-3 text-sm sm:text-base font-semibold transition-colors duration-200 whitespace-nowrap focus:outline-none"
-              style={{
-                color: activeIndex === i ? "#0a0a0a" : "#8C8279",
-                fontWeight: activeIndex === i ? 700 : 500,
-              }}
-              onMouseEnter={(e) => {
-                if (activeIndex !== i) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "#0a0a0a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIndex !== i) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "#8C8279";
-                }
-              }}
-            >
-              {p.tab}
-              {activeIndex === i && (
+        {/* Illustrated tab cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {PERSONAS.map((p, i) => {
+            const isActive = activeIndex === i;
+            return (
+              <button
+                key={p.tab}
+                onClick={() => switchTab(i)}
+                className="relative rounded-2xl p-5 flex flex-col items-center text-center focus:outline-none overflow-hidden"
+                style={{
+                  background: isActive ? "#ffffff" : "rgba(255,255,255,0.5)",
+                  border: isActive ? "1.5px solid #0a0a0a" : "1.5px solid #E8E2D9",
+                  boxShadow: isActive ? "0 4px 20px rgba(0,0,0,0.1)" : "none",
+                  transition: "border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease",
+                  cursor: "pointer",
+                }}
+                aria-selected={isActive}
+                aria-label={`${p.tab} persona`}
+              >
+                {/* Persona name */}
                 <span
-                  className="absolute bottom-0 left-0 right-0 h-0.5"
-                  style={{ backgroundColor: "#0a0a0a" }}
-                />
-              )}
-            </button>
-          ))}
+                  className="text-sm font-semibold mb-4 transition-colors duration-200"
+                  style={{ color: isActive ? "#0a0a0a" : "#8C8279" }}
+                >
+                  {p.tab}
+                </span>
+
+                {/* Illustration + blob */}
+                <div className="relative w-16 h-16">
+                  {/* Animated blob behind illustration — only when active */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: "-8px",
+                      borderRadius: "50%",
+                      background: p.blobColor,
+                      filter: "blur(14px)",
+                      opacity: isActive ? 1 : 0,
+                      transition: "opacity 0.35s ease",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <div
+                    style={{ color: isActive ? "#0a0a0a" : "#C8C2BB" }}
+                    className="relative z-10 transition-colors duration-300"
+                  >
+                    {p.illustration}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Card */}
+        {/* Content panel */}
         <div
-          className="relative rounded-2xl overflow-hidden p-10 sm:p-12"
+          ref={contentRef}
+          className="rounded-3xl overflow-hidden p-8 sm:p-12 relative"
           style={{
             backgroundColor: "#FFFFFF",
             border: "1px solid #E8E2D9",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+            boxShadow: "0 4px 32px rgba(0,0,0,0.06)",
+            transition: "opacity 0.18s ease, transform 0.18s ease",
           }}
         >
-          {/* Gradient blob — bottom-right yellow/orange */}
+          {/* Gradient blob — decorative */}
           <div
             aria-hidden="true"
             style={{
               position: "absolute",
-              bottom: "-100px",
-              right: "-100px",
-              width: "550px",
-              height: "550px",
+              bottom: "-120px",
+              right: "-120px",
+              width: "500px",
+              height: "500px",
               borderRadius: "50%",
-              background: "radial-gradient(circle, #F5B731 0%, #FF6B35 50%, transparent 75%)",
-              filter: "blur(90px)",
-              opacity: 0.45,
-              pointerEvents: "none",
-            }}
-          />
-          {/* Gradient blob — top-left purple */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: "-80px",
-              left: "-80px",
-              width: "400px",
-              height: "400px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, #A855F7 0%, transparent 70%)",
-              filter: "blur(100px)",
-              opacity: 0.25,
+              background: `radial-gradient(circle, ${persona.blobColor} 0%, transparent 70%)`,
+              filter: "blur(80px)",
+              opacity: 0.7,
               pointerEvents: "none",
             }}
           />
 
-          {/* Split layout */}
           <div className="relative z-10 flex flex-col lg:flex-row gap-12">
-            {/* LEFT — Text */}
-            <div className="flex-1 flex flex-col justify-center">
-              {/* Badge */}
-              <div
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold mb-5 self-start"
-                style={{
-                  backgroundColor: "#FEF3D7",
-                  color: "#b87a00",
-                  border: "1px solid rgba(245,183,49,0.3)",
-                }}
-              >
-                {persona.badge}
-              </div>
 
-              {/* Heading */}
-              <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-[#0a0a0a] mb-5 leading-tight">
+            {/* LEFT — Heading + tagline + CTA */}
+            <div className="flex-1 flex flex-col justify-center">
+              <h3
+                className="text-3xl sm:text-4xl font-black text-[#0a0a0a] tracking-tight mb-5 leading-tight"
+                style={{ whiteSpace: "pre-line" }}
+              >
                 {persona.heading}
               </h3>
-
-              {/* Body */}
-              <p className="text-base sm:text-lg leading-relaxed mb-7" style={{ color: "#6B6B6B" }}>
-                {persona.body}
+              <p className="text-base sm:text-lg leading-relaxed mb-8" style={{ color: "#6B6B6B" }}>
+                {persona.tagline}
               </p>
-
-              {/* Benefits */}
-              <ul className="space-y-3 mb-9">
-                {persona.benefits.map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-3">
-                    {/* Yellow checkmark */}
-                    <span
-                      className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5"
-                      style={{ backgroundColor: "#F5B731" }}
-                      aria-hidden="true"
-                    >
-                      <svg
-                        className="w-3 h-3"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M2 6l3 3 5-5"
-                          stroke="#0a0a0a"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    <span className="text-sm sm:text-base font-medium text-[#0a0a0a]">
-                      {benefit}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA */}
               <div>
                 <a
                   href="https://calendly.com"
@@ -244,48 +285,34 @@ export default function WhoWeHelp() {
                   rel="noopener noreferrer"
                   className="btn-dark inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold"
                 >
-                  Book a Strategy Call
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
+                  {persona.cta}
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
               </div>
             </div>
 
-            {/* RIGHT — Stats grid */}
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="grid grid-cols-2 gap-4">
-                {persona.stats.map((stat) => (
+            {/* RIGHT — Benefits */}
+            <div className="flex-1 flex flex-col justify-center gap-7">
+              {persona.benefits.map((b, i) => (
+                <div key={b.title} className="flex gap-4">
+                  {/* Numbered dot */}
                   <div
-                    key={stat.label}
-                    className="rounded-xl p-5 flex flex-col"
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      border: "1px solid #E8E2D9",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                    }}
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
+                    style={{ backgroundColor: "#F5B731", color: "#0a0a0a" }}
+                    aria-hidden="true"
                   >
-                    <span className="text-3xl sm:text-4xl font-black text-[#0a0a0a] leading-none mb-2">
-                      {stat.num}
-                    </span>
-                    <span className="text-xs sm:text-sm font-medium leading-snug" style={{ color: "#8C8279" }}>
-                      {stat.label}
-                    </span>
+                    {i + 1}
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h4 className="text-base font-bold text-[#0a0a0a] mb-1">{b.title}</h4>
+                    <p className="text-sm leading-relaxed" style={{ color: "#52525B" }}>{b.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+
           </div>
         </div>
       </div>

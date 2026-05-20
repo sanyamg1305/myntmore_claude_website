@@ -2,11 +2,12 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import LogoStrip from "./components/LogoStrip";
 import WhoWeHelp from "./components/WhoWeHelp";
+import Industries from "./components/Industries";
 import Services from "./components/Services";
-import HowItWorks from "./components/HowItWorks";
+import SystemFlow from "./components/SystemFlow";
 import BenefitsMarquee from "./components/BenefitsMarquee";
-import Results from "./components/Results";
 import Testimonials from "./components/Testimonials";
+import Promise from "./components/Promise";
 import FAQ from "./components/FAQ";
 import CTABanner from "./components/CTABanner";
 import Footer from "./components/Footer";
@@ -18,11 +19,12 @@ export default function Home() {
       <Hero />
       <LogoStrip />
       <WhoWeHelp />
+      <Industries />
       <Services />
-      <HowItWorks />
+      <SystemFlow />
       <BenefitsMarquee />
-      <Results />
       <Testimonials />
+      <Promise />
       <FAQ />
       <CTABanner />
       <Footer />
