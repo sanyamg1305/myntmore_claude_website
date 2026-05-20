@@ -137,10 +137,8 @@ export default function CTABanner() {
           href="https://calendly.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2.5 px-10 py-5 rounded-full font-black text-lg transition-all duration-200 hover:-translate-y-1 group"
-          style={{ background: "#F5B731", color: "#000000", boxShadow: "0 0 50px rgba(245,183,49,0.5)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#e8a820"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#F5B731"; }}
+          className="inline-flex items-center gap-2.5 px-10 py-5 rounded-full font-black text-lg group btn-dark"
+          style={{ boxShadow: "0 0 50px rgba(245,183,49,0.45)" }}
         >
           Book Your Free Strategy Call
           <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">

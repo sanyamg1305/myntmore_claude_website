@@ -159,13 +159,50 @@ const CONTACT_ITEMS = [
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const blobYellowRef = useRef<HTMLDivElement>(null);
+  const blobPurpleRef = useRef<HTMLDivElement>(null);
+  const blobOrangeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let animId: number;
+    const start = performance.now();
+
+    function animate() {
+      const t = (performance.now() - start) / 1000;
+      if (blobYellowRef.current) {
+        const x = Math.sin(t * 0.6) * 280 + Math.sin(t * 0.25) * 90;
+        const y = Math.cos(t * 0.5) * 120 + Math.cos(t * 0.2) * 50;
+        blobYellowRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      if (blobPurpleRef.current) {
+        const x = Math.sin(t * 0.55 + 2) * 280 + Math.cos(t * 0.35) * 90;
+        const y = Math.cos(t * 0.65 + 1) * 120 + Math.sin(t * 0.3) * 50;
+        blobPurpleRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      if (blobOrangeRef.current) {
+        const x = Math.sin(t * 0.7 + 1) * 200 + Math.sin(t * 0.35) * 70;
+        const y = Math.sin(t * 0.6) * 140 + Math.cos(t * 0.45) * 50;
+        blobOrangeRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      }
+      animId = requestAnimationFrame(animate);
+    }
+
+    animId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
   return (
     <footer
       className="relative overflow-hidden border-t"
       style={{ backgroundColor: "#FFFFFF", borderColor: "#E8E2D9" }}
       aria-label="Site footer"
     >
-      {/* Floating particles layer */}
+      {/* Animated colour blobs */}
+      <div ref={blobYellowRef} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"20%", width:"700px", height:"700px", marginTop:"-350px", marginLeft:"-350px", borderRadius:"50%", background:"radial-gradient(circle, rgba(245,183,49,0.55) 0%, rgba(255,130,0,0.28) 40%, transparent 70%)", filter:"blur(60px)", opacity:0.7, pointerEvents:"none", willChange:"transform" }} />
+      <div ref={blobPurpleRef} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"78%", width:"620px", height:"620px", marginTop:"-310px", marginLeft:"-310px", borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(124,58,237,0.25) 40%, transparent 70%)", filter:"blur(60px)", opacity:0.65, pointerEvents:"none", willChange:"transform" }} />
+      <div ref={blobOrangeRef} aria-hidden="true" style={{ position:"absolute", top:"75%", left:"50%", width:"480px", height:"480px", marginTop:"-240px", marginLeft:"-240px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,107,53,0.48) 0%, rgba(220,60,0,0.22) 40%, transparent 65%)", filter:"blur(60px)", opacity:0.6, pointerEvents:"none", willChange:"transform" }} />
+
+      {/* Floating particles layer (renders above blobs) */}
       <ParticleCanvas />
 
       {/* Ambient gold glow — rises from the bottom */}
@@ -181,20 +218,6 @@ export default function Footer() {
           background: "radial-gradient(ellipse at bottom, rgba(245,183,49,0.13) 0%, rgba(245,183,49,0.04) 45%, transparent 72%)",
           pointerEvents: "none",
           zIndex: 0,
-        }}
-      />
-      {/* Subtle gold top edge glow */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "2px",
-          background: "linear-gradient(to right, transparent 0%, rgba(245,183,49,0.5) 30%, rgba(245,183,49,0.8) 50%, rgba(245,183,49,0.5) 70%, transparent 100%)",
-          pointerEvents: "none",
-          zIndex: 1,
         }}
       />
 

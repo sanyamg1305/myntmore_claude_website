@@ -266,6 +266,95 @@ export default function Hero() {
         }}
       />
 
+      {/* Handwritten annotation — right side */}
+      <div
+        aria-hidden="true"
+        className="hidden lg:flex flex-col items-center gap-1 absolute z-20"
+        style={{
+          right: "4%",
+          top: "38%",
+          transform: "rotate(-10deg)",
+          opacity: 0.82,
+        }}
+      >
+        {/* Arrow pointing left-down toward the CTA */}
+        <svg width="52" height="44" viewBox="0 0 52 44" fill="none" style={{ transform: "scaleX(-1) rotate(-20deg)", marginBottom: "-4px", alignSelf: "flex-end", marginRight: "8px" }}>
+          <path
+            d="M4 6 C10 8, 28 2, 44 18 C50 24, 50 32, 46 38"
+            stroke="#7C3AED"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M40 40 L46 38 L44 32"
+            stroke="#7C3AED"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
+        <div
+          className="flex flex-col items-center text-center leading-snug"
+          style={{
+            fontFamily: "var(--font-caveat)",
+            fontSize: "22px",
+            fontWeight: 700,
+            color: "#7C3AED",
+            lineHeight: 1.25,
+          }}
+        >
+          <span>Human strategy</span>
+          <span style={{ fontSize: "13px", letterSpacing: "0.08em", fontWeight: 600, color: "#a855f7", fontFamily: "var(--font-caveat)" }}>+</span>
+          <span>AI Agent execution</span>
+        </div>
+      </div>
+
+      {/* Handwritten annotation — left side */}
+      <div
+        aria-hidden="true"
+        className="hidden lg:flex flex-col items-start gap-1 absolute z-20"
+        style={{
+          left: "3.5%",
+          top: "55%",
+          transform: "rotate(8deg)",
+          opacity: 0.75,
+        }}
+      >
+        <div
+          className="flex flex-col leading-snug"
+          style={{
+            fontFamily: "var(--font-caveat)",
+            fontSize: "19px",
+            fontWeight: 700,
+            color: "#D97706",
+            lineHeight: 1.3,
+          }}
+        >
+          <span>30,000+ meetings</span>
+          <span>booked & counting ✓</span>
+        </div>
+        {/* Arrow pointing right toward content */}
+        <svg width="48" height="30" viewBox="0 0 48 30" fill="none" style={{ marginTop: "2px", alignSelf: "flex-end" }}>
+          <path
+            d="M4 6 C14 4, 32 8, 42 20"
+            stroke="#D97706"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M36 18 L42 20 L40 26"
+            stroke="#D97706"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
+      </div>
+
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
