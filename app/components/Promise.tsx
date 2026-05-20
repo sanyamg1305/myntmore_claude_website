@@ -51,8 +51,8 @@ export default function Promise() {
         if (!el) return;
         el.textContent = phrase.slice(0, i + 1);
         i++;
-        if (i < phrase.length) timers.push(setTimeout(next, 72));
-        else timers.push(setTimeout(onDone, 2200));
+        if (i < phrase.length) timers.push(setTimeout(next, 38));
+        else timers.push(setTimeout(onDone, 1000));
       }
       next();
     }
@@ -63,9 +63,9 @@ export default function Promise() {
         const cur = el.textContent ?? "";
         if (cur.length > 0) {
           el.textContent = cur.slice(0, -1);
-          timers.push(setTimeout(next, 38));
+          timers.push(setTimeout(next, 22));
         } else {
-          timers.push(setTimeout(onDone, 280));
+          timers.push(setTimeout(onDone, 150));
         }
       }
       next();
@@ -117,15 +117,15 @@ export default function Promise() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
         {/* Label */}
-        <p
-          className="text-xs font-bold uppercase tracking-[0.25em] mb-6"
-          style={{ color: "#8C8279" }}
+        <span
+          className="inline-block text-xs font-bold uppercase tracking-[0.2em] mb-6 px-4 py-1.5 rounded-full border"
+          style={{ color: "#F5B731", borderColor: "rgba(245,183,49,0.35)", background: "#FEF9EC" }}
         >
           Our Promise to You
-        </p>
+        </span>
 
         {/* Typewriter heading */}
-        <h2 className="text-4xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight leading-tight">
+        <h2 className="text-3xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight leading-tight">
           We book{" "}
           <span ref={typedRef} style={{ color: "#0a0a0a" }} />
           <span

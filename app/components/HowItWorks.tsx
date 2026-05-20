@@ -48,13 +48,13 @@ const STEPS = [
     number: "01",
     title: "Deep ICP Discovery",
     description:
-      "We audit your best-fit customers, analyze your win/loss data, and map the precise firmographic and behavioral signals that define your ideal client profile. No guesswork — just data.",
+      "We audit your best-fit customers, analyze your win/loss data, and map the precise firmographic and behavioral signals that define your ideal client profile. No guesswork just data.",
   },
   {
     number: "02",
     title: "Campaign Architecture",
     description:
-      "Multi-touch sequences crafted with segment-specific messaging. Every touchpoint is intentional — the hook, the value prop, the CTA — built to move prospects from curious to ready in the fewest steps possible.",
+      "Multi-touch sequences crafted with segment-specific messaging. Every touchpoint is intentional the hook, the value prop, the CTA built to move prospects from curious to ready in the fewest steps possible.",
   },
   {
     number: "03",
@@ -93,7 +93,7 @@ export default function HowItWorks() {
           </span>
           <h2
             id="how-heading"
-            className="text-4xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight"
+            className="text-3xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight"
           >
             From Zero to Pipeline
             <br />
@@ -101,7 +101,7 @@ export default function HowItWorks() {
           </h2>
           <p className="mt-4 text-[#52525B] text-lg max-w-xl mx-auto">
             A repeatable, proven process that turns your outbound into a
-            predictable revenue engine — not a guessing game.
+            predictable revenue engine not a guessing game.
           </p>
         </div>
 

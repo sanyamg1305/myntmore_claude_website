@@ -35,7 +35,7 @@ const STEPS = [
   },
   {
     number: "06", title: "Book Meetings", phase: "Results",
-    description: "Warm replies convert into qualified calls on your calendar — every meeting comes with full context.",
+    description: "Warm replies convert into qualified calls on your calendar every meeting comes with full context.",
     icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>,
     color: "#22c55e",
   },
@@ -92,7 +92,6 @@ export default function SystemFlow() {
   const blob1Ref     = useRef<HTMLDivElement>(null);
   const blob2Ref     = useRef<HTMLDivElement>(null);
   const blob3Ref     = useRef<HTMLDivElement>(null);
-  // refs for the 6 step cards – used for sequential activation loop
   const cardRefs     = useRef<(HTMLDivElement | null)[]>([null, null, null, null, null, null]);
   const loopInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -120,7 +119,6 @@ export default function SystemFlow() {
         }, seq * 140);
       });
 
-      // Start sequential card-activation loop once entry animations finish
       if (!loopStarted) {
         loopStarted = true;
         setTimeout(startLoop, 2400);
@@ -138,14 +136,12 @@ export default function SystemFlow() {
     let active = 0;
 
     function pulse() {
-      // Reset all
       cardRefs.current.forEach((el) => {
         if (!el) return;
         el.style.borderColor  = "#E8E2D9";
         el.style.boxShadow    = "0 1px 4px rgba(0,0,0,0.04)";
         el.style.background   = "#ffffff";
       });
-      // Highlight active card
       const el = cardRefs.current[active];
       if (el) {
         const c = STEPS[active].color;
@@ -187,11 +183,9 @@ export default function SystemFlow() {
         style={{ transform: "scaleX(0)", transformOrigin: "left center", transition: "transform 0.4s ease" }}
       >
         <div className="flex items-center w-full">
-          {/* Line + traveling dot */}
           <div className="flex-1" style={{ position: "relative", height: "1px", background: `linear-gradient(to right, ${fromColor}, ${toColor})` }}>
             <HDot fromColor={fromColor} toColor={toColor} delay={delay} duration={duration} />
           </div>
-          {/* Arrowhead */}
           <svg className="w-3 h-3 flex-shrink-0" style={{ color: toColor }} fill="none" viewBox="0 0 12 12">
             <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -212,7 +206,6 @@ export default function SystemFlow() {
           style={{ transform: "scaleY(0)", transformOrigin: "top center", transition: "transform 0.35s ease" }}
         >
           <div className="flex flex-col items-center">
-            {/* Line + traveling dot */}
             <div style={{ position: "relative", width: "1px", height: "28px", background: `linear-gradient(to bottom, ${fromColor}, ${toColor})` }}>
               <VDot fromColor={fromColor} toColor={toColor} delay={delay} duration={duration} />
             </div>
@@ -225,16 +218,98 @@ export default function SystemFlow() {
     );
   }
 
+  // ─── LinkedIn parallel track (shared between mobile + desktop) ───────────
+  const LinkedInTrack = ({ seq }: { seq: number }) => (
+    <div
+      data-seq={seq} data-type="card"
+      className="my-2 rounded-2xl border overflow-hidden"
+      style={{
+        opacity:0, transform:"translateY(14px)",
+        transition:"opacity 0.5s ease, transform 0.5s ease",
+        background:"linear-gradient(135deg, rgba(10,102,194,0.07) 0%, rgba(168,85,247,0.06) 100%)",
+        borderColor:"rgba(10,102,194,0.22)",
+        position:"relative",
+      }}
+    >
+      <div aria-hidden="true" style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", borderRadius:"inherit" }}>
+        <div style={{ position:"absolute", top:0, bottom:0, left:0, width:"40%", background:"linear-gradient(90deg, transparent 0%, rgba(10,102,194,0.07) 50%, transparent 100%)", animation:"wf-shimmer 3.5s ease-in-out infinite" }} />
+      </div>
+      <div className="relative z-10 px-4 sm:px-6 py-5">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:"rgba(10,102,194,0.12)", color:"#0a66c2" }}>
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-black uppercase tracking-widest" style={{ color:"#0a66c2" }}>Running in Parallel</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background:"rgba(10,102,194,0.1)", color:"#0a66c2" }}>
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background:"#0a66c2" }} />
+                Active throughout
+              </span>
+            </div>
+            <p className="text-[#0a0a0a] font-bold text-sm sm:text-base mt-0.5">LinkedIn Personal Brand Building</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { icon:"✦", title:"Profile Optimisation", desc:"Headline, banner, about section and featured posts crafted to build instant credibility with your ICP." },
+            { icon:"✦", title:"Content Creation", desc:"Regular posts, carousels, and insights that warm up your target audience before outreach even starts." },
+            { icon:"✦", title:"Thought Leadership", desc:"Position you as the go-to expert in your space so prospects already trust you when they get your message." },
+          ].map((item) => (
+            <div key={item.title} className="flex items-start gap-2.5 p-3 rounded-xl" style={{ background:"rgba(10,102,194,0.05)" }}>
+              <span className="text-xs mt-0.5 flex-shrink-0" style={{ color:"#0a66c2" }}>{item.icon}</span>
+              <div>
+                <p className="text-[#0a0a0a] font-semibold text-sm mb-1">{item.title}</p>
+                <p className="text-[#6B7280] text-xs leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ─── Final result card (shared) ───────────────────────────────────────────
+  const FinalCard = ({ seq }: { seq: number }) => (
+    <div
+      data-seq={seq} data-type="final"
+      className="rounded-2xl p-6 sm:p-8 border text-center relative overflow-hidden"
+      style={{
+        background:"linear-gradient(135deg, #FEF9EC 0%, #FFFBF0 100%)",
+        borderColor:"rgba(245,183,49,0.4)",
+        opacity:0, transform:"translateY(14px)",
+        transition:"opacity 0.5s ease, transform 0.5s ease",
+      }}
+    >
+      <div aria-hidden="true" style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at center, rgba(245,183,49,0.09) 0%, transparent 70%)", pointerEvents:"none" }} />
+      <div aria-hidden="true" style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", borderRadius:"inherit" }}>
+        <div style={{ position:"absolute", top:0, bottom:0, left:0, width:"30%", background:"linear-gradient(90deg, transparent 0%, rgba(245,183,49,0.1) 50%, transparent 100%)", animation:"wf-shimmer 4s ease-in-out infinite", animationDelay:"1s" }} />
+      </div>
+      <div className="relative z-10">
+        <div className="text-3xl mb-2">💰</div>
+        <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-3" style={{ color:"#F5B731", borderColor:"rgba(245,183,49,0.4)", background:"rgba(245,183,49,0.08)" }}>
+          The Result
+        </span>
+        <h3 className="text-xl sm:text-2xl font-black text-[#0a0a0a] mb-2">Mynt More Money.</h3>
+        <p className="text-[#52525B] text-sm max-w-lg mx-auto">
+          Your team closes. Revenue compounds. Repeat the system, scale the results this is what a full-stack outbound engine looks like when it&rsquo;s firing on all cylinders.
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <section
       className="py-24 lg:py-32 relative overflow-hidden"
       style={{ backgroundColor: "#F8F6F2" }}
       aria-labelledby="system-heading"
     >
-      {/* Animated background blobs */}
-      <div ref={blob1Ref} aria-hidden="true" style={{ position:"absolute", top:"20%", left:"15%", width:"600px", height:"600px", marginTop:"-300px", marginLeft:"-300px", borderRadius:"50%", background:"radial-gradient(circle, rgba(245,183,49,0.55) 0%, rgba(255,160,0,0.25) 45%, transparent 68%)", filter:"blur(50px)", pointerEvents:"none", willChange:"transform" }} />
-      <div ref={blob2Ref} aria-hidden="true" style={{ position:"absolute", top:"60%", left:"80%", width:"550px", height:"550px", marginTop:"-275px", marginLeft:"-275px", borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(124,58,237,0.2) 45%, transparent 68%)", filter:"blur(50px)", pointerEvents:"none", willChange:"transform" }} />
-      <div ref={blob3Ref} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"50%", width:"500px", height:"500px", marginTop:"-250px", marginLeft:"-250px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,107,53,0.45) 0%, rgba(255,60,0,0.2) 45%, transparent 68%)", filter:"blur(50px)", pointerEvents:"none", willChange:"transform" }} />
+      {/* Animated background blobs — very subtle */}
+      <div ref={blob1Ref} aria-hidden="true" style={{ position:"absolute", top:"20%", left:"15%", width:"600px", height:"600px", marginTop:"-300px", marginLeft:"-300px", borderRadius:"50%", background:"radial-gradient(circle, rgba(245,183,49,0.09) 0%, rgba(255,160,0,0.04) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
+      <div ref={blob2Ref} aria-hidden="true" style={{ position:"absolute", top:"60%", left:"80%", width:"550px", height:"550px", marginTop:"-275px", marginLeft:"-275px", borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.08) 0%, rgba(124,58,237,0.03) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
+      <div ref={blob3Ref} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"50%", width:"500px", height:"500px", marginTop:"-250px", marginLeft:"-250px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,107,53,0.07) 0%, rgba(255,60,0,0.03) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -243,12 +318,12 @@ export default function SystemFlow() {
           <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] mb-4 px-3 py-1 rounded-full border" style={{ color:"#F5B731", borderColor:"rgba(245,183,49,0.35)", background:"#FEF9EC" }}>
             The Myntmore System
           </span>
-          <h2 id="system-heading" className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a0a0a]">
+          <h2 id="system-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#0a0a0a]">
             From Zero to Pipeline.
             <br />
             <span style={{ color:"#F5B731" }}>Every Single Time.</span>
           </h2>
-          <p className="mt-4 text-[#52525B] text-lg max-w-xl mx-auto">
+          <p className="mt-4 text-[#52525B] text-base sm:text-lg max-w-xl mx-auto">
             A repeatable 6-step system that turns cold lists into qualified meetings and closed revenue.
           </p>
         </div>
@@ -256,217 +331,161 @@ export default function SystemFlow() {
         {/* ── Flow diagram ─────────────────────────────────────────────────── */}
         <div ref={sectionRef}>
 
-          {/* Row 1 — steps 1, 2, 3 */}
-          <div className="grid grid-cols-[1fr_44px_1fr_44px_1fr] items-center gap-0">
-
-            {/* Card 1 */}
-            <div
-              ref={(el) => { cardRefs.current[0] = el; }}
-              data-seq="0" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[0].color+"18", color:STEPS[0].color }}>{STEPS[0].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[0].color }}>{STEPS[0].number}</span>
-              </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[0].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[0].description}</p>
-            </div>
-
-            {/* Arrow 1→2 */}
-            <HArrow seq={1} fromColor={STEPS[0].color} toColor={STEPS[1].color} delay="0s" duration="2s" />
-
-            {/* Card 2 */}
-            <div
-              ref={(el) => { cardRefs.current[1] = el; }}
-              data-seq="2" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[1].color+"18", color:STEPS[1].color }}>{STEPS[1].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[1].color }}>{STEPS[1].number}</span>
-              </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[1].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[1].description}</p>
-            </div>
-
-            {/* Arrow 2→3 */}
-            <HArrow seq={3} fromColor={STEPS[1].color} toColor={STEPS[2].color} delay="0.6s" duration="2s" />
-
-            {/* Card 3 */}
-            <div
-              ref={(el) => { cardRefs.current[2] = el; }}
-              data-seq="4" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[2].color+"18", color:STEPS[2].color }}>{STEPS[2].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[2].color }}>{STEPS[2].number}</span>
-              </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[2].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[2].description}</p>
-            </div>
-
-          </div>
-
-          {/* Vertical connector top */}
-          <VArrow seq={5} fromColor={STEPS[2].color} toColor="#3b82f6" delay="1.2s" duration="1.1s" />
-
-          {/* LinkedIn parallel track */}
-          <div
-            data-seq="6" data-type="card"
-            className="my-2 rounded-2xl border overflow-hidden"
-            style={{
-              opacity:0, transform:"translateY(14px)",
-              transition:"opacity 0.5s ease, transform 0.5s ease",
-              background:"linear-gradient(135deg, rgba(10,102,194,0.07) 0%, rgba(168,85,247,0.06) 100%)",
-              borderColor:"rgba(10,102,194,0.22)",
-              position:"relative",
-            }}
-          >
-            {/* Shimmer sweep */}
-            <div
-              aria-hidden="true"
-              style={{
-                position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", borderRadius:"inherit",
-              }}
-            >
-              <div style={{
-                position:"absolute", top:0, bottom:0, left:0, width:"40%",
-                background:"linear-gradient(90deg, transparent 0%, rgba(10,102,194,0.07) 50%, transparent 100%)",
-                animation:"wf-shimmer 3.5s ease-in-out infinite",
-              }} />
-            </div>
-
-            <div className="relative z-10 px-6 py-5">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:"rgba(10,102,194,0.12)", color:"#0a66c2" }}>
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-black uppercase tracking-widest" style={{ color:"#0a66c2" }}>Running in Parallel</span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background:"rgba(10,102,194,0.1)", color:"#0a66c2" }}>
-                      <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background:"#0a66c2" }} />
-                      Active throughout
-                    </span>
-                  </div>
-                  <p className="text-[#0a0a0a] font-bold text-base mt-0.5">LinkedIn Personal Brand Building</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {[
-                  { icon:"✦", title:"Profile Optimisation", desc:"Headline, banner, about section and featured posts crafted to build instant credibility with your ICP." },
-                  { icon:"✦", title:"Content Creation", desc:"Regular posts, carousels, and insights that warm up your target audience before outreach even starts." },
-                  { icon:"✦", title:"Thought Leadership", desc:"Position you as the go-to expert in your space — so prospects already trust you when they get your message." },
-                ].map((item) => (
-                  <div key={item.title} className="flex items-start gap-2.5 p-3 rounded-xl" style={{ background:"rgba(10,102,194,0.05)" }}>
-                    <span className="text-xs mt-0.5 flex-shrink-0" style={{ color:"#0a66c2" }}>{item.icon}</span>
-                    <div>
-                      <p className="text-[#0a0a0a] font-semibold text-sm mb-1">{item.title}</p>
-                      <p className="text-[#6B7280] text-xs leading-relaxed">{item.desc}</p>
+          {/* ── MOBILE layout: vertical stacked cards ─────────────────────── */}
+          <div className="lg:hidden space-y-3">
+            {STEPS.map((step, i) => (
+              <div key={step.number}>
+                <div
+                  data-seq={i * 2} data-type="card"
+                  className="rounded-2xl p-4 border bg-white shadow-sm"
+                  style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background:step.color+"18", color:step.color }}>{step.icon}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:step.color }}>{step.number}</span>
+                        <h3 className="text-sm font-bold text-[#0a0a0a]">{step.title}</h3>
+                      </div>
+                      <p className="text-[#6B7280] text-xs leading-relaxed">{step.description}</p>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Insert LinkedIn track after step 3 on mobile */}
+                {i === 2 && (
+                  <div className="mt-3">
+                    <LinkedInTrack seq={13} />
+                  </div>
+                )}
+
+                {/* Down arrow connector (except after last step) */}
+                {i < STEPS.length - 1 && (
+                  <div className="flex justify-center py-1" aria-hidden="true">
+                    <svg className="w-4 h-4" style={{ color: "#D4CFC9" }} fill="none" viewBox="0 0 16 16">
+                      <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
               </div>
+            ))}
+
+            {/* Final card — mobile */}
+            <div className="flex justify-center py-1" aria-hidden="true">
+              <svg className="w-4 h-4" style={{ color: "#F5B731" }} fill="none" viewBox="0 0 16 16">
+                <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
+            <FinalCard seq={14} />
           </div>
 
-          {/* Vertical connector bottom */}
-          <VArrow seq={7} fromColor="#3b82f6" toColor={STEPS[3].color} delay="1.8s" duration="1.1s" />
+          {/* ── DESKTOP layout: original 2-row grid ───────────────────────── */}
+          <div className="hidden lg:block">
 
-          {/* Row 2 — steps 4, 5, 6 */}
-          <div className="grid grid-cols-[1fr_44px_1fr_44px_1fr] items-center gap-0">
-
-            {/* Card 4 */}
-            <div
-              ref={(el) => { cardRefs.current[3] = el; }}
-              data-seq="8" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[3].color+"18", color:STEPS[3].color }}>{STEPS[3].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[3].color }}>{STEPS[3].number}</span>
+            {/* Row 1 steps 1, 2, 3 */}
+            <div className="grid grid-cols-[1fr_44px_1fr_44px_1fr] items-center gap-0">
+              <div
+                ref={(el) => { cardRefs.current[0] = el; }}
+                data-seq="0" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[0].color+"18", color:STEPS[0].color }}>{STEPS[0].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[0].color }}>{STEPS[0].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[0].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[0].description}</p>
               </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[3].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[3].description}</p>
-            </div>
 
-            {/* Arrow 4→5 */}
-            <HArrow seq={9} fromColor={STEPS[3].color} toColor={STEPS[4].color} delay="2.4s" duration="2s" />
+              <HArrow seq={1} fromColor={STEPS[0].color} toColor={STEPS[1].color} delay="0s" duration="2s" />
 
-            {/* Card 5 */}
-            <div
-              ref={(el) => { cardRefs.current[4] = el; }}
-              data-seq="10" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[4].color+"18", color:STEPS[4].color }}>{STEPS[4].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[4].color }}>{STEPS[4].number}</span>
+              <div
+                ref={(el) => { cardRefs.current[1] = el; }}
+                data-seq="2" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[1].color+"18", color:STEPS[1].color }}>{STEPS[1].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[1].color }}>{STEPS[1].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[1].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[1].description}</p>
               </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[4].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[4].description}</p>
-            </div>
 
-            {/* Arrow 5→6 */}
-            <HArrow seq={11} fromColor={STEPS[4].color} toColor={STEPS[5].color} delay="3s" duration="2s" />
+              <HArrow seq={3} fromColor={STEPS[1].color} toColor={STEPS[2].color} delay="0.6s" duration="2s" />
 
-            {/* Card 6 */}
-            <div
-              ref={(el) => { cardRefs.current[5] = el; }}
-              data-seq="12" data-type="card"
-              className="rounded-2xl p-5 border bg-white shadow-sm"
-              style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[5].color+"18", color:STEPS[5].color }}>{STEPS[5].icon}</div>
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[5].color }}>{STEPS[5].number}</span>
+              <div
+                ref={(el) => { cardRefs.current[2] = el; }}
+                data-seq="4" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[2].color+"18", color:STEPS[2].color }}>{STEPS[2].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[2].color }}>{STEPS[2].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[2].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[2].description}</p>
               </div>
-              <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[5].title}</h3>
-              <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[5].description}</p>
             </div>
 
-          </div>
+            <VArrow seq={5} fromColor={STEPS[2].color} toColor="#3b82f6" delay="1.2s" duration="1.1s" />
+            <LinkedInTrack seq={6} />
+            <VArrow seq={7} fromColor="#3b82f6" toColor={STEPS[3].color} delay="1.8s" duration="1.1s" />
 
-          {/* Vertical connector to final */}
-          <VArrow seq={13} fromColor={STEPS[5].color} toColor="#F5B731" delay="3.6s" duration="1.1s" />
+            {/* Row 2 steps 4, 5, 6 */}
+            <div className="grid grid-cols-[1fr_44px_1fr_44px_1fr] items-center gap-0">
+              <div
+                ref={(el) => { cardRefs.current[3] = el; }}
+                data-seq="8" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[3].color+"18", color:STEPS[3].color }}>{STEPS[3].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[3].color }}>{STEPS[3].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[3].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[3].description}</p>
+              </div>
 
-          {/* Final card */}
-          <div
-            data-seq="14" data-type="final"
-            className="rounded-2xl p-8 border text-center relative overflow-hidden"
-            style={{
-              background:"linear-gradient(135deg, #FEF9EC 0%, #FFFBF0 100%)",
-              borderColor:"rgba(245,183,49,0.4)",
-              opacity:0, transform:"translateY(14px)",
-              transition:"opacity 0.5s ease, transform 0.5s ease",
-            }}
-          >
-            {/* Radial glow */}
-            <div aria-hidden="true" style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at center, rgba(245,183,49,0.09) 0%, transparent 70%)", pointerEvents:"none" }} />
-            {/* Shimmer sweep */}
-            <div aria-hidden="true" style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none", borderRadius:"inherit" }}>
-              <div style={{ position:"absolute", top:0, bottom:0, left:0, width:"30%", background:"linear-gradient(90deg, transparent 0%, rgba(245,183,49,0.1) 50%, transparent 100%)", animation:"wf-shimmer 4s ease-in-out infinite", animationDelay:"1s" }} />
+              <HArrow seq={9} fromColor={STEPS[3].color} toColor={STEPS[4].color} delay="2.4s" duration="2s" />
+
+              <div
+                ref={(el) => { cardRefs.current[4] = el; }}
+                data-seq="10" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[4].color+"18", color:STEPS[4].color }}>{STEPS[4].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[4].color }}>{STEPS[4].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[4].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[4].description}</p>
+              </div>
+
+              <HArrow seq={11} fromColor={STEPS[4].color} toColor={STEPS[5].color} delay="3s" duration="2s" />
+
+              <div
+                ref={(el) => { cardRefs.current[5] = el; }}
+                data-seq="12" data-type="card"
+                className="rounded-2xl p-5 border bg-white shadow-sm"
+                style={{ opacity:0, transform:"translateY(14px)", transition:"opacity 0.5s ease, transform 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease", borderColor:"#E8E2D9" }}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background:STEPS[5].color+"18", color:STEPS[5].color }}>{STEPS[5].icon}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color:STEPS[5].color }}>{STEPS[5].number}</span>
+                </div>
+                <h3 className="text-[#0a0a0a] font-bold text-base mb-1.5">{STEPS[5].title}</h3>
+                <p className="text-[#6B7280] text-sm leading-relaxed">{STEPS[5].description}</p>
+              </div>
             </div>
-            <div className="relative z-10">
-              <div className="text-3xl mb-2">💰</div>
-              <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border mb-3" style={{ color:"#F5B731", borderColor:"rgba(245,183,49,0.4)", background:"rgba(245,183,49,0.08)" }}>
-                The Result
-              </span>
-              <h3 className="text-2xl font-black text-[#0a0a0a] mb-2">Mynt More Money.</h3>
-              <p className="text-[#52525B] text-sm max-w-lg mx-auto">
-                Your team closes. Revenue compounds. Repeat the system, scale the results — this is what a full-stack outbound engine looks like when it&rsquo;s firing on all cylinders.
-              </p>
-            </div>
+
+            <VArrow seq={13} fromColor={STEPS[5].color} toColor="#F5B731" delay="3.6s" duration="1.1s" />
+            <FinalCard seq={14} />
           </div>
 
         </div>

@@ -35,11 +35,11 @@ const METRICS = [
 
 const CASE_STUDIES = [
   {
-    company: "Series B SaaS — Fintech",
+    company: "Series B SaaS Fintech",
     sector: "SaaS / Fintech",
     result: "47 qualified demos booked in 60 days",
     detail:
-      "We built a cold outreach engine targeting VP Finance and CFO personas at mid-market companies. Starting from scratch, we delivered a full pipeline within 8 weeks — 47 demos with a 34% show rate.",
+      "We built a cold outreach engine targeting VP Finance and CFO personas at mid-market companies. Starting from scratch, we delivered a full pipeline within 8 weeks 47 demos with a 34% show rate.",
   },
   {
     company: "B2B Professional Services",
@@ -99,7 +99,7 @@ export default function Results() {
             style={{ color: "#F5B731", borderColor: "rgba(245,183,49,0.35)", background: "#FEF9EC" }}>
             Results
           </span>
-          <h2 id="results-heading" className="text-4xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight">
+          <h2 id="results-heading" className="text-3xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight">
             Numbers That Actually
             <br />
             <span style={{ color: "#F5B731" }}>Move the Needle</span>
@@ -110,7 +110,7 @@ export default function Results() {
         </div>
 
         {/* Metrics grid */}
-        <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {METRICS.map((metric, i) => (
             <div key={metric.label}
               className="flex flex-col px-6 py-8 rounded-2xl border bg-white relative overflow-hidden"
@@ -118,7 +118,7 @@ export default function Results() {
             >
               <span
                 ref={el => { statRefs.current[i] = el; }}
-                className="text-4xl sm:text-5xl font-bold mb-2 tabular-nums text-[#0a0a0a]"
+                className="text-3xl sm:text-5xl font-bold mb-2 tabular-nums text-[#0a0a0a]"
               >
                 {metric.format(0)}
               </span>

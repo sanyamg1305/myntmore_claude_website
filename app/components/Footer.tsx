@@ -23,7 +23,7 @@ function ParticleCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // 28 tiny dust motes — very slow, very faint
+    // 28 tiny dust motes very slow, very faint
     const motes = Array.from({ length: 28 }, (_, i) => ({
       x:       Math.random() * canvas.width,
       y:       Math.random() * canvas.height,
@@ -104,7 +104,7 @@ const COMPANY_LINKS = [
   { label: "Privacy Policy",href: "#" },
 ];
 const CONTACT_ITEMS = [
-  { label: "hello@myntmore.com",    href: "mailto:hello@myntmore.com" },
+  { label: "growth@myntmore.com",    href: "mailto:growth@myntmore.com" },
   { label: "Book a Discovery Call", href: "https://calendly.com" },
 ];
 
@@ -161,7 +161,7 @@ export default function Footer() {
         {/* Main link grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-14 border-b" style={{ borderColor: "#E8E2D9" }}>
 
-          {/* Col 1 — Logo + blurb */}
+          {/* Col 1 Logo + blurb */}
           <div className="sm:col-span-2 lg:col-span-1">
             <a href="#" className="inline-flex items-center mb-5" aria-label="Myntmore home">
               <Image
@@ -174,7 +174,7 @@ export default function Footer() {
             </a>
             <p className="text-sm leading-relaxed mb-6 max-w-xs" style={{ color: "#6B6B6B" }}>
               B2B cold email, LinkedIn outreach, and account-based marketing that books
-              qualified meetings — at scale.
+              qualified meetings at scale.
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -216,7 +216,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2 — Services */}
+          {/* Col 2 Services */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.18em] mb-5" style={{ color: "#3D3D3D" }}>
               Services
@@ -238,7 +238,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3 — Company */}
+          {/* Col 3 Company */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.18em] mb-5" style={{ color: "#3D3D3D" }}>
               Company
@@ -260,7 +260,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4 — Contact */}
+          {/* Col 4 Contact */}
           <div>
             <h3 className="text-xs font-bold uppercase tracking-[0.18em] mb-5" style={{ color: "#3D3D3D" }}>
               Get in Touch

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ─── Service data ─────────────────────────────────────────────────────────────
 const SERVICES = [
@@ -14,7 +14,7 @@ const SERVICES = [
     ),
     title: "Cold Email Outreach",
     description:
-      "We build and run cold email campaigns that land in inboxes and get replies. Every sequence is written for your specific ICP — sharp subject lines, personalised openers, and CTAs that convert cold strangers into booked meetings.",
+      "We build and run cold email campaigns that land in inboxes and get replies. Every sequence is written for your specific ICP sharp subject lines, personalised openers, and CTAs that convert cold strangers into booked meetings.",
     features: [
       "Domain warm-up & deliverability infrastructure",
       "Hyper-personalised copy per ICP segment",
@@ -35,7 +35,7 @@ const SERVICES = [
     ),
     title: "LinkedIn Outreach",
     description:
-      "We turn LinkedIn into a consistent meeting-booking machine. From connection requests to follow-up messages, every touchpoint starts real conversations with decision-makers — not just adds to your connection count.",
+      "We turn LinkedIn into a consistent meeting-booking machine. From connection requests to follow-up messages, every touchpoint starts real conversations with decision-makers not just adds to your connection count.",
     features: [
       "Targeted ICP outreach at scale",
       "Personalised connection + message sequences",
@@ -56,7 +56,7 @@ const SERVICES = [
     ),
     title: "Account-Based Marketing",
     description:
-      "We identify your highest-value target accounts and run coordinated campaigns across email and LinkedIn to engage the entire buying committee — so when your AE reaches out, the account already knows your name.",
+      "We identify your highest-value target accounts and run coordinated campaigns across email and LinkedIn to engage the entire buying committee so when your AE reaches out, the account already knows your name.",
     features: [
       "ICP-matched target account lists",
       "Intent data & buying signal tracking",
@@ -136,7 +136,7 @@ function ServiceCard({
         </ul>
       </div>
 
-      {/* Footer — metric only */}
+      {/* Footer metric only */}
       <div
         className="px-8 py-5"
         style={{ borderTop: "1px solid #E8E2D9", background: `${accentColor}08` }}
@@ -157,6 +157,81 @@ function ServiceCard({
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 export default function Services() {
+  const underlineRef = useRef<SVGPathElement>(null);
+  const stat1Ref = useRef<HTMLSpanElement>(null);
+  const stat2Ref = useRef<HTMLSpanElement>(null);
+  const stat3Ref = useRef<HTMLSpanElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = statsRef.current;
+    if (!container) return;
+
+    const STATS = [
+      { ref: stat1Ref, target: 3.2,  duration: 1600, format: (n: number) => `${n.toFixed(1)}x` },
+      { ref: stat2Ref, target: 18,   duration: 1400, format: (n: number) => `${Math.round(n)} days` },
+      { ref: stat3Ref, target: 120,  duration: 1800, format: (n: number) => `${Math.round(n)}+` },
+    ];
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+
+      const animIds: number[] = [];
+      STATS.forEach(({ ref, target, duration, format }) => {
+        if (!ref.current) return;
+        let startTime: number | null = null;
+        function tick(ts: number) {
+          if (!startTime) startTime = ts;
+          const progress = Math.min((ts - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          if (ref.current) ref.current.textContent = format(eased * target);
+          if (progress < 1) animIds.push(requestAnimationFrame(tick));
+        }
+        animIds.push(requestAnimationFrame(tick));
+      });
+
+      return () => animIds.forEach(cancelAnimationFrame);
+    }, { threshold: 0.4 });
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const path = underlineRef.current;
+    if (!path) return;
+
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = String(length);
+    path.style.strokeDashoffset = String(length);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+
+        let startTime: number | null = null;
+        const duration = 1200;
+
+        function draw(ts: number) {
+          if (!path) return;
+          if (!startTime) startTime = ts;
+          const progress = Math.min((ts - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          path.style.strokeDashoffset = String(length * (1 - eased));
+          if (progress < 1) requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(path);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="services"
@@ -180,14 +255,20 @@ export default function Services() {
           </span>
           <h2
             id="services-heading"
-            className="text-4xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight"
+            className="text-3xl sm:text-5xl font-black text-[#0a0a0a] tracking-tight"
           >
             Three Channels. One Goal.
             <br />
             <span style={{ color: "#F5B731" }}>Meetings on Your Calendar.</span>
           </h2>
+          {/* Wavy gold underline */}
+          <div className="flex justify-center -mt-1 mb-1" aria-hidden="true">
+            <svg viewBox="0 0 420 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[260px] sm:w-[340px] lg:w-[400px]">
+              <path ref={underlineRef} d="M4 10 C40 4, 80 16, 120 10 S200 4, 240 10 S320 16, 360 10 S400 4, 416 10" stroke="#F5B731" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+            </svg>
+          </div>
           <p className="mt-4 text-[#52525B] text-lg max-w-2xl mx-auto">
-            Cold email, LinkedIn outreach, and ABM — working together to get your brand
+            Cold email, LinkedIn outreach, and ABM working together to get your brand
             in front of the right people and convert them into qualified pipeline.
           </p>
         </div>
@@ -200,12 +281,12 @@ export default function Services() {
         </div>
 
         {/* Shared CTA */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+        <div className="flex flex-col items-center justify-center gap-3 mt-10 text-center">
           <a
             href="https://calendly.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-dark inline-flex items-center gap-2 px-8 py-4 text-base font-bold w-full sm:w-auto justify-center"
+            className="btn-dark inline-flex items-center gap-2 px-8 py-4 text-base font-bold justify-center"
             style={{ borderRadius: "9999px" }}
           >
             Book a Free Strategy Call
@@ -218,21 +299,31 @@ export default function Services() {
 
         {/* Bottom stat strip */}
         <div
+          ref={statsRef}
           className="mt-10 rounded-2xl grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x overflow-hidden"
-          style={{ background: "#ffffff", border: "1px solid #E8E2D9" }}
+          style={{ background: "#ffffff", border: "1px solid #E8E2D9", boxShadow: "0 2px 16px rgba(0,0,0,0.04)", borderColor: "#E8E2D9" }}
         >
           {[
-            { stat: "3.2x", label: "Higher reply rate than industry average" },
-            { stat: "18 days", label: "Average time to first booked meeting" },
-            { stat: "120+", label: "B2B companies trust Myntmore" },
-          ].map((item) => (
+            { ref: stat1Ref, stat: "3.2x",   label: "Higher reply rate than industry average" },
+            { ref: stat2Ref, stat: "18 days", label: "Average time to first booked meeting" },
+            { ref: stat3Ref, stat: "120+",    label: "B2B companies trust Myntmore" },
+          ].map((item, i) => (
             <div
               key={item.stat}
-              className="flex flex-col items-center text-center px-8 py-6"
+              className="flex flex-col items-center text-center px-8 py-7"
               style={{ borderColor: "#E8E2D9" }}
             >
-              <span className="text-2xl sm:text-3xl font-black text-[#0a0a0a] tabular-nums">{item.stat}</span>
-              <span className="text-sm text-[#8C8279] mt-1">{item.label}</span>
+              <span
+                ref={item.ref}
+                className="text-2xl sm:text-4xl font-black tabular-nums text-[#0a0a0a]"
+              >
+                {item.stat}
+              </span>
+              <span
+                className="block w-6 h-0.5 rounded-full mx-auto mt-2 mb-2"
+                style={{ background: "#F5B731" }}
+              />
+              <span className="text-sm text-[#6B6B6B] leading-snug max-w-[180px]">{item.label}</span>
             </div>
           ))}
         </div>

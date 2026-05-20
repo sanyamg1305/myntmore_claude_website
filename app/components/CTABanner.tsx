@@ -56,9 +56,9 @@ export default function CTABanner() {
           marginTop: "-350px",
           marginLeft: "-350px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(245,183,49,0.7) 0%, rgba(255,130,0,0.4) 40%, transparent 70%)",
-          filter: "blur(55px)",
-          opacity: 0.8,
+          background: "radial-gradient(circle, rgba(245,183,49,0.3) 0%, rgba(255,130,0,0.12) 40%, transparent 70%)",
+          filter: "blur(65px)",
+          opacity: 0.9,
           pointerEvents: "none",
           willChange: "transform",
         }}
@@ -77,9 +77,9 @@ export default function CTABanner() {
           marginTop: "-325px",
           marginLeft: "-325px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(168,85,247,0.65) 0%, rgba(124,58,237,0.35) 40%, transparent 70%)",
-          filter: "blur(55px)",
-          opacity: 0.75,
+          background: "radial-gradient(circle, rgba(168,85,247,0.28) 0%, rgba(124,58,237,0.12) 40%, transparent 70%)",
+          filter: "blur(65px)",
+          opacity: 0.9,
           pointerEvents: "none",
           willChange: "transform",
         }}
@@ -98,9 +98,9 @@ export default function CTABanner() {
           marginTop: "-250px",
           marginLeft: "-250px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,107,53,0.6) 0%, rgba(220,60,0,0.3) 40%, transparent 65%)",
-          filter: "blur(55px)",
-          opacity: 0.7,
+          background: "radial-gradient(circle, rgba(255,107,53,0.22) 0%, rgba(220,60,0,0.1) 40%, transparent 65%)",
+          filter: "blur(65px)",
+          opacity: 0.9,
           pointerEvents: "none",
           willChange: "transform",
         }}
@@ -120,7 +120,7 @@ export default function CTABanner() {
 
         <h2
           id="cta-heading"
-          className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#0a0a0a] mb-6 leading-[0.95]"
+          className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#0a0a0a] mb-6 leading-[0.95]"
         >
           Ready to Fill
           <br />
@@ -129,7 +129,7 @@ export default function CTABanner() {
 
         <p className="text-lg sm:text-xl text-[#52525B] max-w-2xl mx-auto mb-10 leading-relaxed">
           Join <span className="text-[#0a0a0a] font-semibold">120+ B2B companies</span> growing
-          with Myntmore. Book your free 30-minute strategy call today — we&rsquo;ll map out
+          with Myntmore. Book your free 30-minute strategy call today we&rsquo;ll map out
           exactly how to generate pipeline for your business.
         </p>
 
@@ -149,7 +149,7 @@ export default function CTABanner() {
           No commitment. No fluff. Just a real conversation about your growth.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10 pt-10 border-t" style={{ borderColor: "#E8E2D9" }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-10 pt-8 sm:pt-10 border-t" style={{ borderColor: "#E8E2D9" }}>
           {["30-minute call, no sales pressure", "Custom strategy for your ICP", "Results or we make it right"].map((item) => (
             <div key={item} className="flex items-center gap-2">
               <svg className="w-4 h-4 flex-shrink-0" style={{ color: "#F5B731" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">

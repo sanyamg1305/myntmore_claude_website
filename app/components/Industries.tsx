@@ -32,6 +32,7 @@ const PILLS: { label: string; color: string; delay: string; duration: string }[]
   { label: "Construction Tech",    color: "#F97316", delay: "1.8s",  duration: "5.1s" },
   { label: "RegTech",              color: "#14B8A6", delay: "0.7s",  duration: "4.2s" },
   { label: "Corporate Gifting",    color: "#F97316", delay: "2.4s",  duration: "4.6s" },
+  { label: "Jewellery",            color: "#EC4899", delay: "1.2s",  duration: "4.1s" },
 ];
 
 function Pill({ label, color, delay, duration }: typeof PILLS[0]) {
@@ -95,13 +96,13 @@ export default function Industries() {
           </span>
           <h2
             id="industries-heading"
-            className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a0a0a]"
+            className="text-3xl sm:text-5xl font-black tracking-tight text-[#0a0a0a]"
           >
             Every B2B sector.{" "}
             <span style={{ color: "#F5B731" }}>One outbound engine.</span>
           </h2>
           <p className="mt-4 text-lg text-[#6B6B6B] max-w-xl mx-auto">
-            If you sell to businesses, we know how to reach your buyers — regardless of vertical.
+            If you sell to businesses, we know how to reach your buyers regardless of vertical.
           </p>
         </div>
 
@@ -122,7 +123,7 @@ export default function Industries() {
             className="font-semibold underline underline-offset-2"
             style={{ color: "#F5B731" }}
           >
-            Let&rsquo;s talk — we&rsquo;ve probably done it.
+            Let&rsquo;s talk we&rsquo;ve probably done it.
           </a>
         </p>
       </div>

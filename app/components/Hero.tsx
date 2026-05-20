@@ -14,6 +14,14 @@ export default function Hero() {
   const statsRef = useRef<HTMLDivElement>(null);
   const cycleRef = useRef<HTMLSpanElement>(null);
 
+  // Handwritten annotation refs
+  const arrowRRef  = useRef<SVGPathElement>(null);
+  const arrowRRef2 = useRef<SVGPathElement>(null);
+  const textRRef   = useRef<HTMLDivElement>(null);
+  const arrowLRef  = useRef<SVGPathElement>(null);
+  const arrowLRef2 = useRef<SVGPathElement>(null);
+  const textLRef   = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let animId: number;
     const start = performance.now();
@@ -84,7 +92,7 @@ export default function Hero() {
     };
   }, []);
 
-  // Number ticker animation — fires after page load since hero is immediately visible
+  // Number ticker animation fires after page load since hero is immediately visible
   useEffect(() => {
     const stats = [
       { ref: stat1Ref, target: 120,   duration: 1800, format: (n: number) => `$${Math.round(n)}M+` },
@@ -188,13 +196,71 @@ export default function Hero() {
     };
   }, []);
 
+  // Handwrite-in animation for annotations
+  useEffect(() => {
+    function animatePath(path: SVGPathElement | null, duration: number, onDone?: () => void) {
+      if (!path) { onDone?.(); return; }
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = String(len);
+      path.style.strokeDashoffset = String(len);
+      const el = path;
+      let start: number | null = null;
+      function step(ts: number) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const e = 1 - Math.pow(1 - p, 2);
+        el.style.strokeDashoffset = String(len * (1 - e));
+        if (p < 1) requestAnimationFrame(step);
+        else onDone?.();
+      }
+      requestAnimationFrame(step);
+    }
+
+    function revealText(el: HTMLDivElement | null, duration: number, onDone?: () => void) {
+      if (!el) { onDone?.(); return; }
+      el.style.clipPath = "inset(0 100% 0 0)";
+      el.style.opacity = "1";
+      const node = el;
+      let start: number | null = null;
+      function step(ts: number) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const e = 1 - Math.pow(1 - p, 2);
+        node.style.clipPath = `inset(0 ${Math.round((1 - e) * 100)}% 0 0)`;
+        if (p < 1) requestAnimationFrame(step);
+        else onDone?.();
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Right annotation: text first, then arrow — starts at 1.2s
+    const t1 = setTimeout(() => {
+      revealText(textRRef.current, 900, () => {
+        animatePath(arrowRRef.current, 500, () => {
+          animatePath(arrowRRef2.current, 250);
+        });
+      });
+    }, 1200);
+
+    // Left annotation: text first, then arrow — starts at 1.8s
+    const t2 = setTimeout(() => {
+      revealText(textLRef.current, 800, () => {
+        animatePath(arrowLRef.current, 450, () => {
+          animatePath(arrowLRef2.current, 220);
+        });
+      });
+    }, 1800);
+
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
+
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16 sm:pt-24"
       style={{ backgroundColor: "#F8F6F2" }}
       aria-label="Hero"
     >
-      {/* Yellow blob — top left */}
+      {/* Yellow blob top left */}
       <div
         ref={blob1Ref}
         aria-hidden="true"
@@ -205,14 +271,14 @@ export default function Hero() {
           width: "800px",
           height: "800px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(245,183,49,0.75) 0%, rgba(255,160,0,0.4) 40%, transparent 68%)",
-          filter: "blur(45px)",
+          background: "radial-gradient(circle, rgba(245,183,49,0.35) 0%, rgba(255,160,0,0.15) 40%, transparent 68%)",
+          filter: "blur(55px)",
           pointerEvents: "none",
           willChange: "transform",
         }}
       />
 
-      {/* Purple blob — top right */}
+      {/* Purple blob top right */}
       <div
         ref={blob2Ref}
         aria-hidden="true"
@@ -223,14 +289,14 @@ export default function Hero() {
           width: "750px",
           height: "750px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(168,85,247,0.7) 0%, rgba(124,58,237,0.35) 40%, transparent 68%)",
-          filter: "blur(45px)",
+          background: "radial-gradient(circle, rgba(168,85,247,0.3) 0%, rgba(124,58,237,0.12) 40%, transparent 68%)",
+          filter: "blur(55px)",
           pointerEvents: "none",
           willChange: "transform",
         }}
       />
 
-      {/* Orange blob — bottom left */}
+      {/* Orange blob bottom left */}
       <div
         ref={blob3Ref}
         aria-hidden="true"
@@ -241,14 +307,14 @@ export default function Hero() {
           width: "700px",
           height: "700px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,107,53,0.7) 0%, rgba(255,60,0,0.35) 40%, transparent 68%)",
-          filter: "blur(45px)",
+          background: "radial-gradient(circle, rgba(255,107,53,0.28) 0%, rgba(255,60,0,0.12) 40%, transparent 68%)",
+          filter: "blur(55px)",
           pointerEvents: "none",
           willChange: "transform",
         }}
       />
 
-      {/* Yellow blob — bottom right */}
+      {/* Yellow blob bottom right */}
       <div
         ref={blob4Ref}
         aria-hidden="true"
@@ -259,43 +325,22 @@ export default function Hero() {
           width: "650px",
           height: "650px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(245,183,49,0.65) 0%, rgba(255,180,0,0.3) 40%, transparent 68%)",
-          filter: "blur(45px)",
+          background: "radial-gradient(circle, rgba(245,183,49,0.28) 0%, rgba(255,180,0,0.1) 40%, transparent 68%)",
+          filter: "blur(55px)",
           pointerEvents: "none",
           willChange: "transform",
         }}
       />
 
-      {/* Handwritten annotation — right side */}
+      {/* Handwritten annotation right side */}
       <div
         aria-hidden="true"
         className="hidden lg:flex flex-col items-center gap-1 absolute z-20"
-        style={{
-          right: "4%",
-          top: "38%",
-          transform: "rotate(-10deg)",
-          opacity: 0.82,
-        }}
+        style={{ right: "4%", top: "38%", animation: "handwrite-float-r 5.5s ease-in-out 2.5s infinite" }}
       >
-        {/* Arrow pointing left-down toward the CTA */}
-        <svg width="52" height="44" viewBox="0 0 52 44" fill="none" style={{ transform: "scaleX(-1) rotate(-20deg)", marginBottom: "-4px", alignSelf: "flex-end", marginRight: "8px" }}>
-          <path
-            d="M4 6 C10 8, 28 2, 44 18 C50 24, 50 32, 46 38"
-            stroke="#7C3AED"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            fill="none"
-          />
-          <path
-            d="M40 40 L46 38 L44 32"
-            stroke="#7C3AED"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </svg>
+        {/* Text reveals first */}
         <div
+          ref={textRRef}
           className="flex flex-col items-center text-center leading-snug"
           style={{
             fontFamily: "var(--font-caveat)",
@@ -303,26 +348,30 @@ export default function Hero() {
             fontWeight: 700,
             color: "#7C3AED",
             lineHeight: 1.25,
+            opacity: 0,
+            clipPath: "inset(0 100% 0 0)",
           }}
         >
           <span>Human strategy</span>
           <span style={{ fontSize: "13px", letterSpacing: "0.08em", fontWeight: 600, color: "#a855f7", fontFamily: "var(--font-caveat)" }}>+</span>
           <span>AI Agent execution</span>
         </div>
+        {/* Arrow draws in after */}
+        <svg width="52" height="44" viewBox="0 0 52 44" fill="none" style={{ transform: "scaleX(-1) rotate(-20deg)", marginBottom: "-4px", alignSelf: "flex-end", marginRight: "8px" }}>
+          <path ref={arrowRRef}  d="M4 6 C10 8, 28 2, 44 18 C50 24, 50 32, 46 38" stroke="#7C3AED" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+          <path ref={arrowRRef2} d="M40 40 L46 38 L44 32" stroke="#7C3AED" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        </svg>
       </div>
 
-      {/* Handwritten annotation — left side */}
+      {/* Handwritten annotation left side */}
       <div
         aria-hidden="true"
         className="hidden lg:flex flex-col items-start gap-1 absolute z-20"
-        style={{
-          left: "3.5%",
-          top: "55%",
-          transform: "rotate(8deg)",
-          opacity: 0.75,
-        }}
+        style={{ left: "3.5%", top: "55%", animation: "handwrite-float-l 7s ease-in-out 3s infinite" }}
       >
+        {/* Text reveals first */}
         <div
+          ref={textLRef}
           className="flex flex-col leading-snug"
           style={{
             fontFamily: "var(--font-caveat)",
@@ -330,36 +379,25 @@ export default function Hero() {
             fontWeight: 700,
             color: "#D97706",
             lineHeight: 1.3,
+            opacity: 0,
+            clipPath: "inset(0 100% 0 0)",
           }}
         >
           <span>30,000+ meetings</span>
           <span>booked & counting ✓</span>
         </div>
-        {/* Arrow pointing right toward content */}
+        {/* Arrow draws in after */}
         <svg width="48" height="30" viewBox="0 0 48 30" fill="none" style={{ marginTop: "2px", alignSelf: "flex-end" }}>
-          <path
-            d="M4 6 C14 4, 32 8, 42 20"
-            stroke="#D97706"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            fill="none"
-          />
-          <path
-            d="M36 18 L42 20 L40 26"
-            stroke="#D97706"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
+          <path ref={arrowLRef}  d="M4 6 C14 4, 32 8, 42 20" stroke="#D97706" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+          <path ref={arrowLRef2} d="M36 18 L42 20 L40 26" stroke="#D97706" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-0">
         {/* Badge */}
         <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border mb-6 sm:mb-8"
           style={{
             background: "rgba(255,255,255,0.7)",
             borderColor: "rgba(245,183,49,0.4)",
@@ -377,7 +415,7 @@ export default function Hero() {
         </div>
 
         {/* H1 */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] mb-6 text-[#0a0a0a]">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[0.95] mb-6 text-[#0a0a0a]">
           <span className="block font-black">We Fill Your Pipeline.</span>
           <span
             ref={cycleRef}
@@ -394,9 +432,9 @@ export default function Hero() {
         </div>
 
         {/* Subheading */}
-        <p className="max-w-2xl mx-auto text-lg sm:text-xl leading-relaxed mb-10 font-normal" style={{ color: "#6B6B6B" }}>
+        <p className="max-w-2xl mx-auto text-base sm:text-xl leading-relaxed mb-8 sm:mb-10 font-normal" style={{ color: "#6B6B6B" }}>
           We run cold email, LinkedIn outreach, and ABM so your pipeline
-          fills itself — and your sales team spends every hour closing,
+          fills itself and your sales team spends every hour closing,
           not prospecting.
         </p>
 
@@ -435,7 +473,7 @@ export default function Hero() {
               style={{ borderColor: "#E8E2D9" }}
             >
               <span ref={stat.ref} className="text-2xl sm:text-3xl font-bold text-[#0a0a0a]">{stat.value}</span>
-              <span className="text-xs sm:text-sm font-medium mt-0.5 whitespace-nowrap" style={{ color: "#8C8279" }}>{stat.label}</span>
+              <span className="text-xs sm:text-sm font-medium mt-0.5 text-center max-w-[160px] sm:max-w-none" style={{ color: "#8C8279" }}>{stat.label}</span>
             </div>
           ))}
         </div>

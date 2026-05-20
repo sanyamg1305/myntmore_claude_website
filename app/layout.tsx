@@ -19,7 +19,7 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "Myntmore | B2B Lead Generation & Cold Outreach Agency",
   description:
-    "Myntmore runs precision cold outreach and account-based marketing campaigns that book qualified meetings — so your sales team never chases cold leads again. 1,200+ meetings booked. $48M+ pipeline generated.",
+    "Myntmore runs precision cold outreach and account-based marketing campaigns that book qualified meetings so your sales team never chases cold leads again. 1,200+ meetings booked. $48M+ pipeline generated.",
   keywords: [
     "B2B lead generation",
     "cold outreach agency",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Myntmore — B2B Lead Generation & Cold Outreach",
+        alt: "Myntmore B2B Lead Generation & Cold Outreach",
       },
     ],
   },

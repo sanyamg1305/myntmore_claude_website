@@ -102,7 +102,7 @@ export default function BenefitsMarquee() {
         <p className="text-sm font-semibold uppercase tracking-widest mb-3" style={{ color: "#F5B731" }}>
           What you unlock
         </p>
-        <h2 className="text-3xl sm:text-4xl font-black text-[#0a0a0a]">
+        <h2 className="text-2xl sm:text-4xl font-black text-[#0a0a0a]">
           Everything your pipeline needs
         </h2>
       </div>

@@ -35,7 +35,7 @@ const ROW_1: Testimonial[] = [
     company: "Vaultline",
     initials: "PM",
     color: "rose",
-    quote: "Best ROI from any marketing spend — by a wide margin. They don't just fill your calendar; they fill it with the right people. Genuinely impressed.",
+    quote: "Best ROI from any marketing spend by a wide margin. They don't just fill your calendar; they fill it with the right people. Genuinely impressed.",
   },
   {
     name: "Alex T.",
@@ -70,7 +70,7 @@ const ROW_2: Testimonial[] = [
     company: "Strataflow",
     initials: "LB",
     color: "sky",
-    quote: "Myntmore's sequences are genuinely different. Not the spam templates everyone else uses — real, personalised copy that gets replies from people who matter.",
+    quote: "Myntmore's sequences are genuinely different. Not the spam templates everyone else uses real, personalised copy that gets replies from people who matter.",
   },
   {
     name: "Raj P.",
@@ -94,7 +94,7 @@ const ROW_2: Testimonial[] = [
     company: "Proxima",
     initials: "CH",
     color: "violet",
-    quote: "Three channels running simultaneously — email, LinkedIn, and ABM — all coordinated. It felt like we had a full SDR team overnight, without the headcount cost.",
+    quote: "Three channels running simultaneously email, LinkedIn, and ABM all coordinated. It felt like we had a full SDR team overnight, without the headcount cost.",
   },
 ];
 
@@ -115,61 +115,61 @@ function Stars({ color = "#F5B731" }: { color?: string }) {
 function TestimonialCard({ t }: { t: Testimonial }) {
   const styles: Record<CardColor, { bg: string; border: string; namecol: string; rolecol: string; quotecol: string; avatarbg: string; avatartext: string; starcol: string }> = {
     rose: {
-      bg: "linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%)",
-      border: "rgba(251,113,133,0.25)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #fff1f2 100%)",
+      border: "rgba(251,113,133,0.12)",
       namecol: "#0a0a0a",
-      rolecol: "#9f1239",
-      quotecol: "#3D1C24",
+      rolecol: "#be123c",
+      quotecol: "#3D3D3D",
       avatarbg: "#E11D48",
       avatartext: "#ffffff",
       starcol: "#F5B731",
     },
     sky: {
-      bg: "linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%)",
-      border: "rgba(56,189,248,0.25)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
+      border: "rgba(56,189,248,0.14)",
       namecol: "#0a0a0a",
       rolecol: "#0369a1",
-      quotecol: "#0c2a3f",
+      quotecol: "#3D3D3D",
       avatarbg: "#0284C7",
       avatartext: "#ffffff",
       starcol: "#F5B731",
     },
     violet: {
-      bg: "linear-gradient(135deg, #f5f3ff 0%, #ddd6fe 100%)",
-      border: "rgba(167,139,250,0.28)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%)",
+      border: "rgba(167,139,250,0.15)",
       namecol: "#0a0a0a",
-      rolecol: "#5b21b6",
-      quotecol: "#2e1065",
+      rolecol: "#6d28d9",
+      quotecol: "#3D3D3D",
       avatarbg: "#7C3AED",
       avatartext: "#ffffff",
       starcol: "#F5B731",
     },
     mint: {
-      bg: "linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%)",
-      border: "rgba(74,222,128,0.28)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)",
+      border: "rgba(74,222,128,0.15)",
       namecol: "#0a0a0a",
-      rolecol: "#166534",
-      quotecol: "#14532d",
+      rolecol: "#15803d",
+      quotecol: "#3D3D3D",
       avatarbg: "#16A34A",
       avatartext: "#ffffff",
       starcol: "#F5B731",
     },
     amber: {
-      bg: "linear-gradient(135deg, #fffbeb 0%, #fde68a 100%)",
-      border: "rgba(251,191,36,0.3)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #fffbeb 100%)",
+      border: "rgba(251,191,36,0.18)",
       namecol: "#0a0a0a",
-      rolecol: "#92400e",
-      quotecol: "#3D2800",
+      rolecol: "#b45309",
+      quotecol: "#3D3D3D",
       avatarbg: "#D97706",
       avatartext: "#ffffff",
-      starcol: "#D97706",
+      starcol: "#F5B731",
     },
     blush: {
-      bg: "linear-gradient(135deg, #fdf4ff 0%, #f5d0fe 100%)",
-      border: "rgba(232,121,249,0.25)",
+      bg: "linear-gradient(135deg, #ffffff 0%, #fdf4ff 100%)",
+      border: "rgba(232,121,249,0.13)",
       namecol: "#0a0a0a",
-      rolecol: "#86198f",
-      quotecol: "#3b0764",
+      rolecol: "#a21caf",
+      quotecol: "#3D3D3D",
       avatarbg: "#C026D3",
       avatartext: "#ffffff",
       starcol: "#F5B731",
@@ -267,7 +267,7 @@ export default function Testimonials() {
         <div className="relative inline-block">
           <h2
             id="testimonials-heading"
-            className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0a0a0a] tracking-tight"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0a0a0a] tracking-tight"
           >
             This is why clients
             <br />

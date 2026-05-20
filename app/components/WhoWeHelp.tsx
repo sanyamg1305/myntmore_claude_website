@@ -75,12 +75,12 @@ const PERSONAS: Persona[] = [
     blobColor: "rgba(245,183,49,0.45)",
     illustration: <RocketIllustration />,
     heading: "Stop being your own SDR.\nStart closing.",
-    tagline: "You started a company to build — not to spend 4 hours a day on LinkedIn. Let Myntmore run the outbound engine.",
+    tagline: "You started a company to build not to spend 4 hours a day on LinkedIn. Let Myntmore run the outbound engine.",
     cta: "Explore Founder solutions",
     benefits: [
-      { title: "Pipeline without headcount", description: "Run a full outbound motion without hiring an SDR or BDR. We do it end to end — strategy, copy, execution." },
+      { title: "Pipeline without headcount", description: "Run a full outbound motion without hiring an SDR or BDR. We do it end to end strategy, copy, execution." },
       { title: "First meeting in under 2 weeks", description: "Fast onboarding means fast results. Most founders see their first booked meeting within 14 days of starting." },
-      { title: "Stay focused on building", description: "You close. We fill. That's the entire model — no distractions, no micromanaging sequences, just calendar invites." },
+      { title: "Stay focused on building", description: "You close. We fill. That's the entire model no distractions, no micromanaging sequences, just calendar invites." },
     ],
   },
   {
@@ -91,7 +91,7 @@ const PERSONAS: Persona[] = [
     tagline: "Your reps are built to close, not prospect. Feed them a consistent flow of qualified, pre-warmed meetings.",
     cta: "Explore Sales Leader solutions",
     benefits: [
-      { title: "Predictable meeting volume", description: "Know exactly how many qualified meetings hit your team's calendar each week — no more feast or famine." },
+      { title: "Predictable meeting volume", description: "Know exactly how many qualified meetings hit your team's calendar each week no more feast or famine." },
       { title: "Reps close 40% more", description: "When reps stop prospecting and start closing, conversion rates climb. We've seen it across 120+ clients." },
       { title: "Full CRM visibility", description: "Every meeting, touchpoint, and reply synced to HubSpot or Salesforce automatically. Zero manual logging." },
     ],
@@ -105,7 +105,7 @@ const PERSONAS: Persona[] = [
     cta: "Explore Marketing solutions",
     benefits: [
       { title: "Account lists built for you", description: "We identify your highest-value target accounts and build targeted lists from scratch using intent data." },
-      { title: "Multi-channel coordination", description: "Email + LinkedIn running in sync to hit the full buying committee — so when your AE calls, they're already warm." },
+      { title: "Multi-channel coordination", description: "Email + LinkedIn running in sync to hit the full buying committee so when your AE calls, they're already warm." },
       { title: "Campaigns live in 28 days", description: "From brief to first email sent in under a month. No 3-month ramp-up. No unnecessary delays." },
     ],
   },
@@ -114,7 +114,7 @@ const PERSONAS: Persona[] = [
     blobColor: "rgba(34,197,94,0.3)",
     illustration: <NetworkIllustration />,
     heading: "Clean data. Tight sequences.\nReliable revenue.",
-    tagline: "We integrate with your CRM and tech stack — every touchpoint tracked, every forecast accurate.",
+    tagline: "We integrate with your CRM and tech stack every touchpoint tracked, every forecast accurate.",
     cta: "Explore RevOps solutions",
     benefits: [
       { title: "99% data accuracy", description: "Every contact enriched and verified before it touches your CRM. No more bounces, dead leads, or dirty data." },
@@ -124,33 +124,44 @@ const PERSONAS: Persona[] = [
   },
 ];
 
+const CYCLE_MS = 1800;
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function WhoWeHelp() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const pendingIndex = useRef<number | null>(null);
+  const contentRef  = useRef<HTMLDivElement>(null);
+  const activeRef   = useRef(0);          // always current, readable in interval
+  const pausedRef   = useRef(false);      // paused when user hovers
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [progressKey, setProgressKey] = useState(0); // forces CSS restart
 
-  const switchTab = useCallback((idx: number) => {
-    if (idx === activeIndex) return;
+  const switchTab = useCallback((idx: number, manual = false) => {
+    if (manual) pausedRef.current = true;   // hovering / clicking pauses auto
+    if (idx === activeRef.current) return;
     const el = contentRef.current;
-    if (el) {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(10px)";
-    }
-    pendingIndex.current = idx;
+    if (el) { el.style.opacity = "0"; el.style.transform = "translateY(10px)"; }
     setTimeout(() => {
+      activeRef.current = idx;
       setActiveIndex(idx);
-      // fade back in after React re-renders
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (contentRef.current) {
-            contentRef.current.style.opacity = "1";
-            contentRef.current.style.transform = "translateY(0px)";
-          }
-        });
-      });
+      setProgressKey(k => k + 1);          // restart progress bar
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (contentRef.current) {
+          contentRef.current.style.opacity = "1";
+          contentRef.current.style.transform = "translateY(0px)";
+        }
+      }));
     }, 180);
-  }, [activeIndex]);
+  }, []);
+
+  // Auto-cycle
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      if (pausedRef.current) return;
+      const next = (activeRef.current + 1) % PERSONAS.length;
+      switchTab(next);
+    }, CYCLE_MS);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [switchTab]);
 
   // Ensure content starts visible
   useEffect(() => {
@@ -174,23 +185,27 @@ export default function WhoWeHelp() {
         <div className="text-center mb-12">
           <h2
             id="who-heading"
-            className="text-4xl sm:text-5xl font-black tracking-tight text-[#0a0a0a] mb-4"
+            className="text-3xl sm:text-5xl font-black tracking-tight text-[#0a0a0a] mb-4"
           >
             Built for every B2B growth team
           </h2>
           <p className="max-w-2xl mx-auto text-lg leading-relaxed" style={{ color: "#6B6B6B" }}>
-            Whether you&rsquo;re a founder doing outbound yourself or a VP Sales scaling a team — Myntmore has a playbook for you.
+            Whether you&rsquo;re a founder doing outbound yourself or a VP Sales scaling a team Myntmore has a playbook for you.
           </p>
         </div>
 
         {/* Illustrated tab cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        <div
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8"
+          onMouseEnter={() => { pausedRef.current = true; }}
+          onMouseLeave={() => { pausedRef.current = false; }}
+        >
           {PERSONAS.map((p, i) => {
             const isActive = activeIndex === i;
             return (
               <button
                 key={p.tab}
-                onClick={() => switchTab(i)}
+                onClick={() => switchTab(i, true)}
                 className="relative rounded-2xl p-5 flex flex-col items-center text-center focus:outline-none overflow-hidden"
                 style={{
                   background: isActive ? "#ffffff" : "rgba(255,255,255,0.5)",
@@ -210,9 +225,31 @@ export default function WhoWeHelp() {
                   {p.tab}
                 </span>
 
+                {/* Progress bar bottom of active card */}
+                {isActive && (
+                  <span
+                    key={progressKey}
+                    aria-hidden="true"
+                    style={{
+                      position: "absolute",
+                      bottom: 0, left: 0,
+                      height: "3px",
+                      borderRadius: "0 0 12px 12px",
+                      background: "#F5B731",
+                      animation: `none`,
+                      width: "100%",
+                      transformOrigin: "left",
+                      animationName: "tab-progress",
+                      animationDuration: `${CYCLE_MS}ms`,
+                      animationTimingFunction: "linear",
+                      animationFillMode: "forwards",
+                    }}
+                  />
+                )}
+
                 {/* Illustration + blob */}
                 <div className="relative w-16 h-16">
-                  {/* Animated blob behind illustration — only when active */}
+                  {/* Animated blob behind illustration only when active */}
                   <div
                     style={{
                       position: "absolute",
@@ -248,7 +285,7 @@ export default function WhoWeHelp() {
             transition: "opacity 0.18s ease, transform 0.18s ease",
           }}
         >
-          {/* Gradient blob — decorative */}
+          {/* Gradient blob decorative */}
           <div
             aria-hidden="true"
             style={{
@@ -267,10 +304,10 @@ export default function WhoWeHelp() {
 
           <div className="relative z-10 flex flex-col lg:flex-row gap-12">
 
-            {/* LEFT — Heading + tagline + CTA */}
+            {/* LEFT Heading + tagline + CTA */}
             <div className="flex-1 flex flex-col justify-center">
               <h3
-                className="text-3xl sm:text-4xl font-black text-[#0a0a0a] tracking-tight mb-5 leading-tight"
+                className="text-2xl sm:text-4xl font-black text-[#0a0a0a] tracking-tight mb-4 sm:mb-5 leading-tight"
                 style={{ whiteSpace: "pre-line" }}
               >
                 {persona.heading}
@@ -293,7 +330,7 @@ export default function WhoWeHelp() {
               </div>
             </div>
 
-            {/* RIGHT — Benefits */}
+            {/* RIGHT Benefits */}
             <div className="flex-1 flex flex-col justify-center gap-7">
               {persona.benefits.map((b, i) => (
                 <div key={b.title} className="flex gap-4">
