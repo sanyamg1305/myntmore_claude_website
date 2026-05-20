@@ -32,14 +32,8 @@ const ROW_3 = [
 ];
 
 const CHIP_PALETTES = [
-  { bg: "linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%)", border: "#fda4af", dot: "#E11D48" },
-  { bg: "linear-gradient(135deg, #fffbeb 0%, #fde68a 100%)", border: "#fcd34d", dot: "#D97706" },
-  { bg: "linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%)", border: "#7dd3fc", dot: "#0284C7" },
-  { bg: "linear-gradient(135deg, #f5f3ff 0%, #ddd6fe 100%)", border: "#c4b5fd", dot: "#7C3AED" },
-  { bg: "linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%)", border: "#86efac", dot: "#16A34A" },
-  { bg: "linear-gradient(135deg, #fdf4ff 0%, #f5d0fe 100%)", border: "#e879f9", dot: "#C026D3" },
-  { bg: "linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%)", border: "#fdba74", dot: "#EA580C" },
-  { bg: "linear-gradient(135deg, #ecfeff 0%, #a5f3fc 100%)", border: "#67e8f9", dot: "#0891B2" },
+  { bg: "linear-gradient(135deg, #ffffff 0%, #FEF9EC 100%)", border: "rgba(245,183,49,0.35)", dot: "#D97706" },
+  { bg: "linear-gradient(135deg, #ffffff 0%, #F5F3FF 100%)", border: "rgba(167,139,250,0.35)", dot: "#7C3AED" },
 ];
 
 function Chip({ label, paletteIdx }: { label: string; paletteIdx: number }) {
@@ -51,7 +45,7 @@ function Chip({ label, paletteIdx }: { label: string; paletteIdx: number }) {
         background: p.bg,
         borderColor: p.border,
         color: "#1a1a1a",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+        boxShadow: "0 1px 6px rgba(0,0,0,0.05)",
       }}
     >
       <span

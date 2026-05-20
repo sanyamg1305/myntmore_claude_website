@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 
 
-// ─── Floating gold particles (canvas) ────────────────────────────────────────
+// ─── Subtle dust motes (canvas) ──────────────────────────────────────────────
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -23,84 +23,37 @@ function ParticleCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // ── Tier 1: Large glowing orbs (slow, soft) ──────────────
-    const orbs = Array.from({ length: 10 }, (_, i) => ({
+    // 28 tiny dust motes — very slow, very faint
+    const motes = Array.from({ length: 28 }, (_, i) => ({
       x:       Math.random() * canvas.width,
       y:       Math.random() * canvas.height,
-      size:    Math.random() * 10 + 7,       // 7–17 px
-      speed:   Math.random() * 0.12 + 0.04,
-      drift:   (Math.random() - 0.5) * 0.18,
-      opacity: Math.random() * 0.18 + 0.10,
-      phase:   (i / 10) * Math.PI * 2,
-    }));
-
-    // ── Tier 2: Medium bright dots ───────────────────────────
-    const mids = Array.from({ length: 55 }, (_, i) => ({
-      x:       Math.random() * canvas.width,
-      y:       Math.random() * canvas.height,
-      size:    Math.random() * 3 + 1.5,      // 1.5–4.5 px
-      speed:   Math.random() * 0.45 + 0.18,
-      drift:   (Math.random() - 0.5) * 0.32,
-      opacity: Math.random() * 0.55 + 0.35,
-      phase:   (i / 55) * Math.PI * 2,
-    }));
-
-    // ── Tier 3: Tiny sparkles (fast, sharp) ──────────────────
-    const sparks = Array.from({ length: 70 }, (_, i) => ({
-      x:       Math.random() * canvas.width,
-      y:       Math.random() * canvas.height,
-      size:    Math.random() * 1.4 + 0.4,    // 0.4–1.8 px
-      speed:   Math.random() * 0.7 + 0.25,
-      drift:   (Math.random() - 0.5) * 0.5,
-      opacity: Math.random() * 0.8 + 0.4,
-      phase:   (i / 70) * Math.PI * 2,
+      size:    Math.random() * 1.8 + 0.5,
+      speed:   Math.random() * 0.18 + 0.06,
+      drift:   (Math.random() - 0.5) * 0.12,
+      opacity: Math.random() * 0.18 + 0.06,
+      phase:   (i / 28) * Math.PI * 2,
     }));
 
     let animId: number;
     let t = 0;
 
-    function moveParticle(p: typeof mids[0]) {
-      p.y -= p.speed;
-      p.x += Math.sin(t + p.phase) * p.drift;
-      if (p.y < -20)              { p.y = canvas!.height + 10; p.x = Math.random() * canvas!.width; }
-      if (p.x < -10)              p.x = canvas!.width + 10;
-      if (p.x > canvas!.width + 10) p.x = -10;
-    }
-
     function draw() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-      t += 0.007;
+      t += 0.004;
 
-      // Draw orbs — big soft glow
-      ctx!.shadowColor = "rgba(245,183,49,0.45)";
-      ctx!.shadowBlur  = 28;
-      for (const p of orbs) {
-        moveParticle(p);
+      ctx!.shadowColor = "rgba(245,183,49,0.3)";
+      ctx!.shadowBlur  = 6;
+
+      for (const p of motes) {
+        p.y -= p.speed;
+        p.x += Math.sin(t + p.phase) * p.drift;
+        if (p.y < -10) { p.y = canvas!.height + 10; p.x = Math.random() * canvas!.width; }
+        if (p.x < -10) p.x = canvas!.width + 10;
+        if (p.x > canvas!.width + 10) p.x = -10;
+
         ctx!.beginPath();
         ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx!.fillStyle = `rgba(245,183,49,${p.opacity})`;
-        ctx!.fill();
-      }
-
-      // Draw mids — medium glow
-      ctx!.shadowColor = "rgba(245,183,49,0.7)";
-      ctx!.shadowBlur  = 10;
-      for (const p of mids) {
-        moveParticle(p);
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(245,183,49,${p.opacity})`;
-        ctx!.fill();
-      }
-
-      // Draw sparks — sharp, no blur
-      ctx!.shadowBlur  = 4;
-      ctx!.shadowColor = "rgba(245,183,49,0.9)";
-      for (const p of sparks) {
-        moveParticle(p);
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(255,200,60,${p.opacity})`;
         ctx!.fill();
       }
 
@@ -159,34 +112,20 @@ const CONTACT_ITEMS = [
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const blobYellowRef = useRef<HTMLDivElement>(null);
-  const blobPurpleRef = useRef<HTMLDivElement>(null);
-  const blobOrangeRef = useRef<HTMLDivElement>(null);
+  const breathRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let animId: number;
     const start = performance.now();
-
     function animate() {
       const t = (performance.now() - start) / 1000;
-      if (blobYellowRef.current) {
-        const x = Math.sin(t * 0.6) * 280 + Math.sin(t * 0.25) * 90;
-        const y = Math.cos(t * 0.5) * 120 + Math.cos(t * 0.2) * 50;
-        blobYellowRef.current.style.transform = `translate(${x}px, ${y}px)`;
-      }
-      if (blobPurpleRef.current) {
-        const x = Math.sin(t * 0.55 + 2) * 280 + Math.cos(t * 0.35) * 90;
-        const y = Math.cos(t * 0.65 + 1) * 120 + Math.sin(t * 0.3) * 50;
-        blobPurpleRef.current.style.transform = `translate(${x}px, ${y}px)`;
-      }
-      if (blobOrangeRef.current) {
-        const x = Math.sin(t * 0.7 + 1) * 200 + Math.sin(t * 0.35) * 70;
-        const y = Math.sin(t * 0.6) * 140 + Math.cos(t * 0.45) * 50;
-        blobOrangeRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      if (breathRef.current) {
+        const x = Math.sin(t * 0.18) * 60 + Math.sin(t * 0.09) * 30;
+        const y = Math.cos(t * 0.14) * 40 + Math.cos(t * 0.07) * 20;
+        breathRef.current.style.transform = `translate(${x}px, ${y}px)`;
       }
       animId = requestAnimationFrame(animate);
     }
-
     animId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animId);
   }, []);
@@ -197,29 +136,25 @@ export default function Footer() {
       style={{ backgroundColor: "#FFFFFF", borderColor: "#E8E2D9" }}
       aria-label="Site footer"
     >
-      {/* Animated colour blobs */}
-      <div ref={blobYellowRef} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"20%", width:"700px", height:"700px", marginTop:"-350px", marginLeft:"-350px", borderRadius:"50%", background:"radial-gradient(circle, rgba(245,183,49,0.55) 0%, rgba(255,130,0,0.28) 40%, transparent 70%)", filter:"blur(60px)", opacity:0.7, pointerEvents:"none", willChange:"transform" }} />
-      <div ref={blobPurpleRef} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"78%", width:"620px", height:"620px", marginTop:"-310px", marginLeft:"-310px", borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(124,58,237,0.25) 40%, transparent 70%)", filter:"blur(60px)", opacity:0.65, pointerEvents:"none", willChange:"transform" }} />
-      <div ref={blobOrangeRef} aria-hidden="true" style={{ position:"absolute", top:"75%", left:"50%", width:"480px", height:"480px", marginTop:"-240px", marginLeft:"-240px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,107,53,0.48) 0%, rgba(220,60,0,0.22) 40%, transparent 65%)", filter:"blur(60px)", opacity:0.6, pointerEvents:"none", willChange:"transform" }} />
-
-      {/* Floating particles layer (renders above blobs) */}
-      <ParticleCanvas />
-
-      {/* Ambient gold glow — rises from the bottom */}
+      {/* Single soft breathing warmth */}
       <div
+        ref={breathRef}
         aria-hidden="true"
         style={{
           position: "absolute",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "90%",
-          height: "260px",
-          background: "radial-gradient(ellipse at bottom, rgba(245,183,49,0.13) 0%, rgba(245,183,49,0.04) 45%, transparent 72%)",
+          top: "50%", left: "50%",
+          width: "900px", height: "500px",
+          marginTop: "-250px", marginLeft: "-450px",
+          borderRadius: "50%",
+          background: "radial-gradient(ellipse, rgba(245,183,49,0.07) 0%, rgba(245,183,49,0.03) 45%, transparent 70%)",
+          filter: "blur(40px)",
           pointerEvents: "none",
-          zIndex: 0,
+          willChange: "transform",
         }}
       />
+
+      {/* Dust motes */}
+      <ParticleCanvas />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
