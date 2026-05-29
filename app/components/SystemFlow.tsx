@@ -306,7 +306,7 @@ export default function SystemFlow() {
       style={{ backgroundColor: "#F8F6F2" }}
       aria-labelledby="system-heading"
     >
-      {/* Animated background blobs — very subtle */}
+      {/* Animated background blobs, very subtle */}
       <div ref={blob1Ref} aria-hidden="true" style={{ position:"absolute", top:"20%", left:"15%", width:"600px", height:"600px", marginTop:"-300px", marginLeft:"-300px", borderRadius:"50%", background:"radial-gradient(circle, rgba(245,183,49,0.09) 0%, rgba(255,160,0,0.04) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
       <div ref={blob2Ref} aria-hidden="true" style={{ position:"absolute", top:"60%", left:"80%", width:"550px", height:"550px", marginTop:"-275px", marginLeft:"-275px", borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.08) 0%, rgba(124,58,237,0.03) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
       <div ref={blob3Ref} aria-hidden="true" style={{ position:"absolute", top:"50%", left:"50%", width:"500px", height:"500px", marginTop:"-250px", marginLeft:"-250px", borderRadius:"50%", background:"radial-gradient(circle, rgba(255,107,53,0.07) 0%, rgba(255,60,0,0.03) 45%, transparent 68%)", filter:"blur(80px)", pointerEvents:"none", willChange:"transform" }} />
@@ -370,7 +370,7 @@ export default function SystemFlow() {
               </div>
             ))}
 
-            {/* Final card — mobile */}
+            {/* Final card, mobile */}
             <div className="flex justify-center py-1" aria-hidden="true">
               <svg className="w-4 h-4" style={{ color: "#F5B731" }} fill="none" viewBox="0 0 16 16">
                 <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

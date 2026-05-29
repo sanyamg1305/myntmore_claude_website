@@ -340,6 +340,51 @@ body {
   100% { transform: scaleX(0); }
 }
 
+/* ─── Inner page hover utilities (server-component safe) ─── */
+.link-muted { color: #6B6B6B; transition: color 0.2s ease; }
+.link-muted:hover { color: #0a0a0a; }
+.link-subtle { color: #8C8279; transition: color 0.2s ease; }
+.link-subtle:hover { color: #F5B731; }
+.link-dark { color: #3D3D3D; transition: color 0.2s ease; }
+.link-dark:hover { color: #0a0a0a; }
+.card-hover-warm { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-warm:hover { border-color: rgba(245,183,49,0.5) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; }
+.card-hover-dark { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-dark:hover { border-color: #0a0a0a !important; box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important; }
+.card-hover-blue { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-blue:hover { border-color: rgba(59,130,246,0.5) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; }
+.card-hover-purple { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-purple:hover { border-color: rgba(168,85,247,0.5) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; }
+.card-hover-green { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-green:hover { border-color: rgba(34,197,94,0.5) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; }
+.card-hover-linkedin { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.card-hover-linkedin:hover { border-color: rgba(0,119,181,0.5) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important; }
+.chip-hover { transition: border-color 0.15s ease, color 0.15s ease; }
+.chip-hover:hover { border-color: rgba(245,183,49,0.6) !important; color: #D97706 !important; }
+
+/* ─── Scroll reveal (FadeIn component) ───────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Inner-page hero entrance animations ────────────────── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-fade    { animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-fade-d1 { animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 90ms both; }
+.hero-fade-d2 { animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 190ms both; }
+.hero-fade-d3 { animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 310ms both; }
+.hero-fade-d4 { animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 450ms both; }
+
 /* ─── Hero handwritten annotation floats ─────────────────── */
 @keyframes handwrite-float-r {
   0%   { transform: rotate(-10deg) translate(0px, 0px); }

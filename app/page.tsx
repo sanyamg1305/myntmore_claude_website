@@ -1,4 +1,29 @@
+import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
+
+export const metadata: Metadata = {
+  title: "Myntmore | B2B Lead Generation & AI-Powered Outbound Agency",
+  description:
+    "Myntmore is Mumbai's leading AI-powered B2B outbound agency. We build and run cold email, LinkedIn outreach, and ABM systems that book qualified meetings. 12K+ meetings booked. $120M+ pipeline generated.",
+  alternates: { canonical: "https://myntmore.com" },
+  keywords: [
+    "b2b lead generation",
+    "b2b lead generation agency",
+    "cold outreach agency",
+    "ai agency in mumbai",
+    "linkedin outreach",
+    "cold email agency",
+    "myntmore",
+    "outbound sales agency",
+    "account-based marketing",
+  ],
+  openGraph: {
+    title: "Myntmore | B2B Lead Generation & AI-Powered Outbound Agency",
+    description:
+      "We build and run your outbound engine using AI agents and human intelligence. Cold email, LinkedIn outreach, and ABM that books qualified meetings at scale.",
+    url: "https://myntmore.com",
+  },
+};
 import Hero from "./components/Hero";
 import LogoStrip from "./components/LogoStrip";
 import WhoWeHelp from "./components/WhoWeHelp";

@@ -1,0 +1,117 @@
+import type { Metadata } from "next";
+import InnerLayout from "../components/InnerLayout";
+import FadeIn from "../components/FadeIn";
+
+export const metadata: Metadata = {
+  title: "Contact Myntmore | Book a Free B2B GTM Audit",
+  description: "Book a free 30-minute B2B GTM audit with Myntmore. We'll audit your outreach, map your ICP, and tell you exactly what's holding your pipeline back. No pitch, no pressure.",
+  alternates: { canonical: "https://myntmore.com/contact-us" },
+  openGraph: {
+    title: "Contact Myntmore | Book a Free B2B GTM Audit",
+    description: "Book a free 30-minute strategy call. No pitch, no pressure. Just clarity on your pipeline.",
+    url: "https://myntmore.com/contact-us",
+  },
+};
+
+const CONTACT_CARDS = [
+  { icon: "📅", title: "Free GTM Audit", value: "30-minute strategy call", href: "https://calendly.com/founder-myntmore/30-min", cta: "Book free call" },
+  { icon: "⏱", title: "Extended Session", value: "1-hour strategy meeting", href: "https://calendly.com/founder-myntmore/1-hour-meeting", cta: "Book 1-hour session" },
+  { icon: "✉️", title: "Email Directly", value: "growth@myntmore.com", href: "mailto:growth@myntmore.com", cta: "Send email" },
+];
+
+export default function ContactUs() {
+  return (
+    <InnerLayout>
+      <section className="pt-32 pb-16 px-4" style={{ backgroundColor: "#F8F6F2" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-4">
+            <span className="inline-flex text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full" style={{ backgroundColor: "#FEF9EC", color: "#F5B731", border: "1px solid rgba(245,183,49,0.3)" }}>Get in Touch</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight hero-fade-d1" style={{ color: "#0a0a0a" }}>
+            Stop guessing.<br />Start closing.
+          </h1>
+          <p className="text-lg sm:text-xl max-w-xl mx-auto hero-fade-d2" style={{ color: "#52525B" }}>
+            Book a 30-minute strategy call. We&apos;ll audit your outreach, map your ICP, and tell you exactly what&apos;s holding your pipeline back. No pitch, no pressure.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <FadeIn><div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
+            {CONTACT_CARDS.map((c) => (
+              <a key={c.title} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined} className="block rounded-2xl border p-6 card-hover-warm" style={{ backgroundColor: "#ffffff", borderColor: "#E8E2D9" }}>
+                <div className="text-2xl mb-3">{c.icon}</div>
+                <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#8C8279" }}>{c.title}</p>
+                <p className="text-base font-semibold mb-3" style={{ color: "#0a0a0a" }}>{c.value}</p>
+                <span className="text-sm font-bold" style={{ color: "#F5B731" }}>{c.cta} →</span>
+              </a>
+            ))}
+          </div></FadeIn>
+
+          <FadeIn delay={80}><div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+            <div className="lg:col-span-3">
+              <div className="rounded-2xl border p-8" style={{ backgroundColor: "#ffffff", borderColor: "#E8E2D9" }}>
+                <h2 className="text-2xl font-black mb-2" style={{ color: "#0a0a0a" }}>Ready to build your AI engine?</h2>
+                <p className="text-sm mb-6" style={{ color: "#52525B" }}>Fill out the form and we&apos;ll get back to you within 24 hours with a custom GTM strategy.</p>
+                <form className="space-y-4" action="mailto:growth@myntmore.com" method="get">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="firstName" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>First Name *</label>
+                      <input id="firstName" name="firstName" type="text" required placeholder="Tejas" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>Last Name *</label>
+                      <input id="lastName" name="lastName" type="text" required placeholder="Jhaveri" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="designation" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>Designation *</label>
+                    <input id="designation" name="designation" type="text" required placeholder="Founder / Head of Sales" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="company" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>Company</label>
+                      <input id="company" name="company" type="text" placeholder="Acme Corp" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>Phone</label>
+                      <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-semibold mb-1.5" style={{ color: "#3D3D3D" }}>Email *</label>
+                    <input id="email" name="email" type="email" required placeholder="tejas@myntmore.com" className="w-full px-4 py-3 rounded-xl text-sm outline-none border" style={{ backgroundColor: "#F8F6F2", borderColor: "#E8E2D9", color: "#0a0a0a" }} />
+                  </div>
+                  <button type="submit" className="btn-dark w-full py-4 text-sm font-bold">Get Your Custom Strategy</button>
+                  <p className="text-center text-xs" style={{ color: "#8C8279" }}>No commitments. No agency pitch decks. Just clarity.</p>
+                </form>
+              </div>
+            </div>
+
+            <div className="lg:col-span-2 space-y-6">
+              <div className="rounded-2xl border p-6" style={{ backgroundColor: "#ffffff", borderColor: "#E8E2D9" }}>
+                <h3 className="text-base font-black mb-4" style={{ color: "#0a0a0a" }}>What happens next</h3>
+                {[
+                  "Submit your details above or book a call directly via Calendly",
+                  "We review your current outreach setup before the call",
+                  "30-min GTM audit: ICP mapping, outreach review, pipeline blockers",
+                  "Custom action plan sent within 24 hours",
+                ].map((text, i) => (
+                  <div key={i} className="flex gap-3 mb-4">
+                    <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5" style={{ backgroundColor: "#FEF9EC", color: "#F5B731", border: "1px solid rgba(245,183,49,0.3)" }}>{`0${i + 1}`}</span>
+                    <p className="text-sm" style={{ color: "#52525B" }}>{text}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="rounded-2xl border p-6" style={{ backgroundColor: "#ffffff", borderColor: "#E8E2D9" }}>
+                <h3 className="text-base font-black mb-3" style={{ color: "#0a0a0a" }}>Our office</h3>
+                <p className="text-sm" style={{ color: "#52525B" }}>1101, Prithvi Emperor,<br />New Prabhadevi Road,<br />Mumbai 400025</p>
+              </div>
+            </div>
+          </div></FadeIn>
+        </div>
+      </section>
+    </InnerLayout>
+  );
+}

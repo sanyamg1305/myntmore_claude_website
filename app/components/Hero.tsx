@@ -233,7 +233,7 @@ export default function Hero() {
       requestAnimationFrame(step);
     }
 
-    // Right annotation: text first, then arrow — starts at 1.2s
+    // Right annotation: text first, then arrow, starts at 1.2s
     const t1 = setTimeout(() => {
       revealText(textRRef.current, 900, () => {
         animatePath(arrowRRef.current, 500, () => {
@@ -242,7 +242,7 @@ export default function Hero() {
       });
     }, 1200);
 
-    // Left annotation: text first, then arrow — starts at 1.8s
+    // Left annotation: text first, then arrow, starts at 1.8s
     const t2 = setTimeout(() => {
       revealText(textLRef.current, 800, () => {
         animatePath(arrowLRef.current, 450, () => {

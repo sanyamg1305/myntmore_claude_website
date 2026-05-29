@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Caveat } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,49 +17,66 @@ const caveat = Caveat({
   weight: ["400", "600", "700"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#F8F6F2",
+};
+
 export const metadata: Metadata = {
-  title: "Myntmore | B2B Lead Generation & Cold Outreach Agency",
+  title: {
+    default: "Myntmore | B2B Lead Generation & AI-Powered Outbound Agency",
+    template: "%s | Myntmore",
+  },
   description:
-    "Myntmore runs precision cold outreach and account-based marketing campaigns that book qualified meetings so your sales team never chases cold leads again. 1,200+ meetings booked. $48M+ pipeline generated.",
+    "Myntmore is Mumbai's leading AI-powered B2B outbound agency. We build and run cold email, LinkedIn outreach, and ABM systems that book qualified meetings. 12K+ meetings booked. $120M+ pipeline generated.",
   keywords: [
-    "B2B lead generation",
+    "b2b lead generation",
+    "b2b lead generation agency",
     "cold outreach agency",
+    "ai agency in mumbai",
+    "ai agency",
+    "personal brand building mumbai",
     "account-based marketing",
-    "ABM",
-    "sales development",
-    "qualified meetings",
-    "B2B pipeline",
-    "outbound sales",
-    "SDR agency",
+    "linkedin outreach",
+    "cold email agency",
     "myntmore",
+    "tejas jhaveri",
+    "b2b pipeline",
+    "outbound sales agency",
+    "sales intelligence",
+    "icp mapping",
   ],
-  authors: [{ name: "Myntmore" }],
+  authors: [{ name: "Tejas Jhaveri", url: "https://linkedin.com/in/tejasjhaveri" }],
   creator: "Myntmore",
+  publisher: "Myntmore",
   metadataBase: new URL("https://myntmore.com"),
+  alternates: { canonical: "https://myntmore.com" },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://myntmore.com",
     siteName: "Myntmore",
-    title: "Myntmore | B2B Lead Generation & Cold Outreach Agency",
+    title: "Myntmore | B2B Lead Generation & AI-Powered Outbound Agency",
     description:
-      "We fill your pipeline. You close the deals. Precision cold outreach and ABM campaigns that book qualified meetings at scale.",
+      "We build and run your outbound engine using AI agents and human intelligence. Cold email, LinkedIn outreach, and ABM that books qualified meetings at scale.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Myntmore B2B Lead Generation & Cold Outreach",
+        alt: "Myntmore — B2B Lead Generation & AI-Powered Outbound Agency, Mumbai",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Myntmore | B2B Lead Generation & Cold Outreach Agency",
-    description:
-      "We fill your pipeline. You close the deals. Precision cold outreach and ABM campaigns that book qualified meetings at scale.",
-    images: ["/og-image.png"],
+    site: "@myntmore",
     creator: "@myntmore",
+    title: "Myntmore | B2B Lead Generation & AI-Powered Outbound Agency",
+    description:
+      "We build and run your outbound engine using AI agents and human intelligence. Cold email, LinkedIn outreach, and ABM that books qualified meetings at scale.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -71,7 +89,13 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "G-PEY6FXLPMH",
+  },
+  category: "business",
 };
+
+const GA_ID = "G-PEY6FXLPMH";
 
 export default function RootLayout({
   children,
@@ -80,7 +104,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
-      <body className="bg-background text-white antialiased">{children}</body>
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+      </head>
+      <body className="bg-background text-white antialiased">
+        {children}
+
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+      </body>
     </html>
   );
 }

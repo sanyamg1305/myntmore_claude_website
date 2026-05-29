@@ -150,7 +150,7 @@ export default function WhoWeHelp() {
           contentRef.current.style.transform = "translateY(0px)";
         }
       }));
-    }, 180);
+    }, 320);
   }, []);
 
   // Auto-cycle
@@ -282,7 +282,7 @@ export default function WhoWeHelp() {
             backgroundColor: "#FFFFFF",
             border: "1px solid #E8E2D9",
             boxShadow: "0 4px 32px rgba(0,0,0,0.06)",
-            transition: "opacity 0.18s ease, transform 0.18s ease",
+            transition: "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
           {/* Gradient blob decorative */}

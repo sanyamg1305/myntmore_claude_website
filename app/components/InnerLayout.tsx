@@ -1,0 +1,12 @@
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+export default function InnerLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: "#F8F6F2" }}>
+      <Navbar />
+      <main>{children}</main>
+      <Footer />
+    </div>
+  );
+}
