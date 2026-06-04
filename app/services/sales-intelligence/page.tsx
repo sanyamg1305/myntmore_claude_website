@@ -544,3 +544,20 @@ export default function SalesIntelligence() {
           </a>
 
           <p className="mt-5
+          text-sm" style={{ color: "#6B6B6B" }}>No commitment. Just a live look at the signal data for your market.</p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-10 pt-8 border-t" style={{ borderColor: "#E8E2D9" }}>
+            {["Daily signal refresh", "40+ intent triggers", "Results or we make it right"].map((item) => (
+              <div key={item} className="flex items-center gap-2">
+                <svg className="w-4 h-4 flex-shrink-0" style={{ color: "#F5B731" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-sm" style={{ color: "#52525B" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </InnerLayout>
+  );
+}
